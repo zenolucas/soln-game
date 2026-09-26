@@ -92,6 +92,9 @@ func _notification(notification) -> void:
 			"saved_scene": saved_scene,
 			"vector_x": saved_position.x,
 			"vector_y": saved_position.y,
+			"first_time_init_floor1": first_time_initializing_first_floor_scene,
+			"first_time_init_floor2": first_time_initializing_second_floor_scene,
+			"first_time_init_floor3": first_time_initializing_third_floor_scene,
 			
 			# add auto actionalble variables here
 			"rock_removed": DialogueState.rock_removed,
