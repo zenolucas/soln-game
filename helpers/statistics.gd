@@ -28,7 +28,7 @@ func post_fraction_statistics(classroom_id, student_id, question_id, minigame_id
 	print(post_data)
 	
 	var json_body = JSON.stringify(post_data)
-	var headers = ["Content-type: application/json"]
+	var headers = Global.auth_headers()
 	
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
@@ -51,7 +51,7 @@ func postQuizResponse(classroomID, minigameID, questionID, studentID, choiceID):
 	}
 	
 	var json_body = JSON.stringify(post_data)
-	var headers = ["Content-type: application/json"]
+	var headers = Global.auth_headers()
 	
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
@@ -72,7 +72,7 @@ func postQuizScore(studentID, classroomID, minigameID, score):
 	}
 	
 	var json_body = JSON.stringify(post_data)
-	var headers = ["Content-type: application/json"]
+	var headers = Global.auth_headers()
 	
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)

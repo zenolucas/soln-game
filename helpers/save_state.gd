@@ -50,7 +50,7 @@ func load_save_data(student_id):
 	}
 	
 	var json_body = JSON.stringify(post_data)
-	var headers = ["Content-type: application/json"]
+	var headers = Global.auth_headers()
 		
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
@@ -112,7 +112,7 @@ func post_save_data(save_data):
 	http_request.request_completed.connect(self._http_post_completed)
 	
 	var json_body = JSON.stringify(save_data)
-	var headers = ["Content-type: application/json"]
+	var headers = Global.auth_headers()
 	
 	# execute POST request
 	print("this executes")

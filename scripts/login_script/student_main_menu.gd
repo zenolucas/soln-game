@@ -43,6 +43,7 @@ func _http_request_completed(result, response_code, headers, body):
 				Global.is_online = true
 				PlayerState.classroom_id = response.classroom_id
 				PlayerState.student_id = response.student_id
+				PlayerState.game_token = response.get("token", "")
 				print("we got classroomID: ", response.classroom_id)
 				print("and student id is: ", response.student_id)
 				get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")	#get_tree().change_scene_to_file("res://scenes/gameplay_scenes/simple_fraction_gameplay/addition_fraction/fraction_sample_gameplay.tscn")
