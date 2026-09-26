@@ -289,6 +289,7 @@ func return_to_world():
 	if DialogueState.current_quest == "wizard_training_room":
 		print("Wizard training complete!")
 		DialogueState.current_quest = "wizard_training_room_worded_complete"
+		PlayerState.autosave()
 	get_tree().change_scene_to_file("res://scenes/levels/Floor2.tscn")
 
 # Plays when the player inputs a correct answer

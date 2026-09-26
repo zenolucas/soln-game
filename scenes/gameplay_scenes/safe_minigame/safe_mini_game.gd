@@ -27,6 +27,7 @@ func _on_fraction_problem_correct() -> void:
 
 func _on_fraction_problem_all_done() -> void:
 	DialogueState.current_quest = "chip_gameplay_done"
+	PlayerState.autosave()
 	safe_opened = true
 	Global.add_energy()
 

@@ -22,8 +22,10 @@ func _on_fraction_problem_all_done() -> void:
 	if current_quest == "saisai_wheelbarrow":
 		print("All done with simple, current quest is: ", current_quest)
 		DialogueState.current_quest = "saisai_wheelbarrow_gameplay_done"
+		PlayerState.autosave()
 	elif current_quest == "dead_robots":
 		DialogueState.current_quest = "dead_robots_gameplay_done"
+		PlayerState.autosave()
 	$Congrats.visible = true
 	Global.add_energy()
 

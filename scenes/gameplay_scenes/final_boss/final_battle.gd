@@ -23,6 +23,7 @@ func _process(delta: float) -> void:
 	
 	if Global.guardian_enemy_hp == 0:
 		DialogueState.current_quest = "final_boss_quiz_successful"
+		PlayerState.autosave()
 		if Global.is_online:
 			if Global.total_score < 0:
 				Global.total_score = 0

@@ -21,6 +21,7 @@ func _process(delta: float) -> void:
 	# Thresholds, not exact values: HP steps depend on how many questions the quiz has.
 	if Global.Snekker_HP == 0:
 		DialogueState.current_quest = "snake_quiz_complete"
+		PlayerState.autosave()
 		if Global.is_online:
 			if Global.total_score < 0:
 				Global.total_score = 0

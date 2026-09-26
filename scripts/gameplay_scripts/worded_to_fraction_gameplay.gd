@@ -327,9 +327,11 @@ func return_to_world():
 	print("Returning")
 	if DialogueState.current_quest == "raket_stealing":
 		DialogueState.current_quest = "raket_stealing_gameplay_done"
+		PlayerState.autosave()
 	if DialogueState.current_quest == "raket_house":
 		print("IGHDSAD UIHASDUHASD")
 		DialogueState.current_quest = "raket_house_worded_complete"
+		PlayerState.autosave()
 	get_tree().change_scene_to_file("res://scenes/levels/Floor1.tscn")
 
 # Plays when the player inputs a correct answer
