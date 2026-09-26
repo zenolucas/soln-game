@@ -56,10 +56,22 @@ func randomize_questions(questions_array: Array, current_chosen_questions: Array
 	print("Current chosen index question are ", chosen_index_questions)
 	return current_chosen_questions
 
-# Every request to the teacher-module server is built here (GAME-09): plain HTTP on port 3000 to the
-# address typed at login. Change the scheme or port in this one place.
+# Every request to the teacher-module server is built here (GAME-09) from the address typed at login:
+# - a full URL ("https://soln.example.com") is used as-is, so a deployed server works over HTTPS;
+# - a bare host ("192.168.1.10", "localhost") means a LAN server: plain HTTP on port 3000;
+# - a host with a port ("192.168.1.10:8080") means plain HTTP on that port.
+func server_base_url(address: String) -> String:
+	var base := address.strip_edges()
+	while base.ends_with("/"):
+		base = base.left(-1)
+	if base.begins_with("https://") or base.begins_with("http://"):
+		return base
+	if not ":" in base:
+		base += ":3000"
+	return "http://" + base
+
 func server_url(path: String) -> String:
-	return "http://" + host_ip + ":3000" + path
+	return server_base_url(host_ip) + path
 
 # Headers for requests that read or write this student's data (the server rejects them without the token).
 func auth_headers() -> PackedStringArray:
