@@ -18,7 +18,6 @@ func _on_login_button_button_down():
 	Global.host_ip = ip_address_input.text
 	login_url = "http://" + Global.host_ip + ":3000/game/login"
 	
-	print("username: " + username.text + " " + "password: " + password.text)
 	var credentials = {
 		"username": username.text,
 		"password": password.text
