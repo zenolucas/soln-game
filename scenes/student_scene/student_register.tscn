@@ -95,7 +95,7 @@ offset_right = 865.0
 offset_bottom = 111.0
 scale = Vector2(0.99258, 0.982386)
 theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "IP Address"
+placeholder_text = "Server (IP or https:// URL)"
 caret_blink = true
 
 [node name="FirstName" type="LineEdit" parent="StudentInformation"]
