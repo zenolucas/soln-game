@@ -34,7 +34,6 @@ func _on_register_button_button_down():
 	}
 
 	var json_body = JSON.stringify(credentials)
-	print(json_body)
 	var headers = ["Content-type: application/json"]
 	
 	# Perform a POST request. Rhe URL registers the input of the student to the database
