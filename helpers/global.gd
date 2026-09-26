@@ -56,6 +56,11 @@ func randomize_questions(questions_array: Array, current_chosen_questions: Array
 	print("Current chosen index question are ", chosen_index_questions)
 	return current_chosen_questions
 
+# Every request to the teacher-module server is built here (GAME-09): plain HTTP on port 3000 to the
+# address typed at login. Change the scheme or port in this one place.
+func server_url(path: String) -> String:
+	return "http://" + host_ip + ":3000" + path
+
 # Headers for requests that read or write this student's data (the server rejects them without the token).
 func auth_headers() -> PackedStringArray:
 	return PackedStringArray(["Content-type: application/json", "Authorization: Bearer " + PlayerState.game_token])
