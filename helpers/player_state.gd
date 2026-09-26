@@ -73,62 +73,71 @@ func _ready() -> void:
 	# to deal with abrupt quitting before sending saved data
 	get_tree().auto_accept_quit = false
 
+# Everything the server stores for this student. Position and scene are the last spot in the
+# world: entering a minigame records them (save_player_position_and_change_scene), so a save made
+# after a minigame resumes the student where they started it.
+func build_save_data() -> Dictionary:
+	return {
+		"student_id": student_id,
+		"player_badges": player_badges,
+		"current_floor": Global.current_floor,
+		"current_quest": DialogueState.current_quest,
+		"saved_scene": saved_scene,
+		"vector_x": saved_position.x,
+		"vector_y": saved_position.y,
+		"first_time_init_floor1": first_time_initializing_first_floor_scene,
+		"first_time_init_floor2": first_time_initializing_second_floor_scene,
+		"first_time_init_floor3": first_time_initializing_third_floor_scene,
+		
+		# add auto actionalble variables here
+		"rock_removed": DialogueState.rock_removed,
+		"disable_rock_removed": DialogueState.disable_rock_removed,
+		"raket_sneaking_quest_complete": DialogueState.raket_sneaking_quest_complete,
+		"unlock_cave_collision": DialogueState.unlock_cave_collision,
+		"raket_sword_complete": DialogueState.raket_sword_complete,
+		"raket_quest_progress": DialogueState.raket_quest_progress,
+		"do_raket_blacksmith_animation": DialogueState.do_raket_blacksmith_animation,
+		"sword_bottom": DialogueState.sword_bottom,
+		"sword_guard": DialogueState.sword_guard,
+		"sword_lower_blade": DialogueState.sword_lower_blade,
+		"sword_middle_blade": DialogueState.sword_middle_blade,
+		"sword_top_blade": DialogueState.sword_top_blade,
+		
+		"disable_dead_robot_quest": DialogueState.disable_dead_robot_quest,
+		"disable_raket_stealing_quest": DialogueState.disable_raket_stealing_quest,
+		"disable_fresh_dialogue_quest": DialogueState.disable_fresh_dialogue_quest,
+		"disable_water_logged_1_quest": DialogueState.disable_water_logged_1_quest,
+		"disable_water_logged_2_quest": DialogueState.disable_water_logged_2_quest,
+		"disable_water_logged_3_quest": DialogueState.disable_water_logged_3_quest,
+		"disable_chip_quest": DialogueState.disable_chip_quest,
+		"disable_rat_wizard_training_quest": DialogueState.disable_rat_wizard_training_quest
+	}
+
+# Saves right away when a minigame is cleared, so a crash or power cut doesn't lose that progress.
+# Like the quit-save, it only runs online and only after this session's save loaded: otherwise the
+# in-memory state is defaults, not the student's.
+func autosave() -> void:
+	if Global.is_online and SaveState.load_success:
+		print("Autosaving")
+		SaveState.post_save_data(build_save_data())
+
 #EXIT LISTENER ON NOTIFICATION == 1006
 func _notification(notification) -> void:
 	if notification == 1006:
-		var current_scene_before_exit =  get_tree().current_scene
-		var current_player_node = current_scene_before_exit.get_node("MainCharacter")
-		print("Player node found")
-		saved_position = current_player_node.get_player_position()  # Call the function from Player.gd
+		# Quitting from a menu, cutscene or minigame has no MainCharacter; keep the last world position.
+		var current_player_node = get_tree().current_scene.get_node_or_null("MainCharacter") if get_tree().current_scene else null
+		if current_player_node:
+			saved_position = current_player_node.get_player_position()
 		print("Current scene: ", saved_scene)
 		print("Current position: ", saved_position)
-		
-		# ADD VARIABLES TO SAVE HERE
-		var save_data = {
-			"student_id": student_id,
-			"player_badges": player_badges,
-			"current_floor": Global.current_floor,
-			"current_quest": DialogueState.current_quest,
-			"saved_scene": saved_scene,
-			"vector_x": saved_position.x,
-			"vector_y": saved_position.y,
-			"first_time_init_floor1": first_time_initializing_first_floor_scene,
-			"first_time_init_floor2": first_time_initializing_second_floor_scene,
-			"first_time_init_floor3": first_time_initializing_third_floor_scene,
-			
-			# add auto actionalble variables here
-			"rock_removed": DialogueState.rock_removed,
-			"disable_rock_removed": DialogueState.disable_rock_removed,
-			"raket_sneaking_quest_complete": DialogueState.raket_sneaking_quest_complete,
-			"unlock_cave_collision": DialogueState.unlock_cave_collision,
-			"raket_sword_complete": DialogueState.raket_sword_complete,
-			"raket_quest_progress": DialogueState.raket_quest_progress,
-			"do_raket_blacksmith_animation": DialogueState.do_raket_blacksmith_animation,
-			"sword_bottom": DialogueState.sword_bottom,
-			"sword_guard": DialogueState.sword_guard,
-			"sword_lower_blade": DialogueState.sword_lower_blade,
-			"sword_middle_blade": DialogueState.sword_middle_blade,
-			"sword_top_blade": DialogueState.sword_top_blade,
-			
-			"disable_dead_robot_quest": DialogueState.disable_dead_robot_quest,
-			"disable_raket_stealing_quest": DialogueState.disable_raket_stealing_quest,
-			"disable_fresh_dialogue_quest": DialogueState.disable_fresh_dialogue_quest,
-			"disable_water_logged_1_quest": DialogueState.disable_water_logged_1_quest,
-			"disable_water_logged_2_quest": DialogueState.disable_water_logged_2_quest,
-			"disable_water_logged_3_quest": DialogueState.disable_water_logged_3_quest,
-			"disable_chip_quest": DialogueState.disable_chip_quest,
-			"disable_rat_wizard_training_quest": DialogueState.disable_rat_wizard_training_quest
-		}
 
-		##part where you write the player stuff onto the database
 		# Without a successful load this is the default state, not the student's: posting it would
 		# overwrite their real save.
 		if Global.is_online and not SaveState.load_success:
 			print("Not saving: this session's save never loaded")
 		elif Global.is_online:
 			print("curently saving... ")
-			print(save_data)
-			SaveState.post_save_data(save_data)
+			SaveState.post_save_data(build_save_data())
 			# some delay to send saved data to server
 			await get_tree().create_timer(1.0).timeout
 		print("Exiting game")

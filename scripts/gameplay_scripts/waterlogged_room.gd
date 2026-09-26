@@ -15,10 +15,13 @@ func _process(delta: float) -> void:
 	if current_water_level == 0:
 		if DialogueState.current_quest == "water_room_1":
 			DialogueState.current_quest = "after_wr_1"
+			PlayerState.autosave()
 		elif DialogueState.current_quest == "water_room_2":
 			DialogueState.current_quest = "after_wr_2"
+			PlayerState.autosave()
 		elif DialogueState.current_quest == "water_room_3":
 			DialogueState.current_quest = "after_wr_3" 
+			PlayerState.autosave()
 		congrats.visible = true
 		if not already_added:
 			Global.add_energy()

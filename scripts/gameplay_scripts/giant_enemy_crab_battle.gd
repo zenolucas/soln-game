@@ -23,6 +23,7 @@ func _process(delta: float) -> void:
 	
 	if Global.Giant_Enemy_Crab_HP == 0:
 		DialogueState.current_quest = "crab_quiz_successful"
+		PlayerState.autosave()
 		if Global.is_online:
 			if Global.total_score < 0:
 				Global.total_score = 0
