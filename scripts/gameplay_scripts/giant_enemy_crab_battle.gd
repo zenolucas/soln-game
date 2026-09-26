@@ -23,7 +23,10 @@ func _process(delta: float) -> void:
 	
 	if Global.Giant_Enemy_Crab_HP == 0:
 		DialogueState.current_quest = "crab_quiz_successful"
-		Statistics.postQuizScore(PlayerState.student_id, PlayerState.classroom_id, 11, Global.total_score)
+		if Global.is_online:
+			if Global.total_score < 0:
+				Global.total_score = 0
+			Statistics.postQuizScore(PlayerState.student_id, PlayerState.classroom_id, 11, Global.total_score)
 		get_tree().change_scene_to_file("res://scenes/levels/Floor2.tscn")
 
 func _on_attack_pressed() -> void:
