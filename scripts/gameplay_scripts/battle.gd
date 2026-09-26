@@ -18,17 +18,8 @@ func _process(delta: float) -> void:
 		question.hide()
 		question_bg.hide()
 	
-	if Global.Snekker_HP == 80:
-		snekker_sprite.play("damaged_life_1")
-		
-	elif Global.Snekker_HP == 50:
-		snekker_sprite.play("damaged_life_2")
-		enemy_hp.add_theme_color_override("font_color", "#933f45")
-	
-	elif Global.Snekker_HP == 20:
-		snekker_sprite.play("damaged_life_3")
-		
-	elif Global.Snekker_HP == 0:
+	# Thresholds, not exact values: HP steps depend on how many questions the quiz has.
+	if Global.Snekker_HP == 0:
 		DialogueState.current_quest = "snake_quiz_complete"
 		if Global.is_online:
 			if Global.total_score < 0:
@@ -37,8 +28,13 @@ func _process(delta: float) -> void:
 		var root = get_node("/root")
 		if root:
 			root.get_tree().change_scene_to_file("res://scenes/levels/Floor1.tscn")
-
-		#get_tree().change_scene_to_file("res://scenes/levels/Floor1.tscn")
+	elif Global.Snekker_HP <= 20:
+		snekker_sprite.play("damaged_life_3")
+	elif Global.Snekker_HP <= 50:
+		snekker_sprite.play("damaged_life_2")
+		enemy_hp.add_theme_color_override("font_color", "#933f45")
+	elif Global.Snekker_HP <= 80:
+		snekker_sprite.play("damaged_life_1")
 
 func _on_attack_pressed() -> void:
 	Global.Snekker_question = true

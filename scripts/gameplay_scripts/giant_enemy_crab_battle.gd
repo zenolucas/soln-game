@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 		question.hide()
 		question_bg.hide()
 	
-	if Global.Giant_Enemy_Crab_HP == 50:
+	if Global.Giant_Enemy_Crab_HP <= 50:
 		enemy_hp.add_theme_color_override("font_color", "#933f45")
 	
 	

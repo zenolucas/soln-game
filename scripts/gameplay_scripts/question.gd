@@ -16,6 +16,8 @@ var correct_answer
 var answer
 var rng = RandomNumberGenerator.new()
 var question
+# Number of questions this fight started with (set on the first answer, before any is removed).
+var question_count := 0
 
 func _ready():
 	if Global.is_online:
@@ -108,7 +110,7 @@ func _on_questions_loaded():
 # can change for better randomness using shuffle bags
 func _choose_question() -> int:
 	print(mc_questions)
-	return RandomNumberGenerator.new().randi_range(0, mc_questions.size()) - 1
+	return RandomNumberGenerator.new().randi_range(0, mc_questions.size() - 1)
 
 func _on_choice_1_pressed() -> void:
 	# post statistic if online
@@ -136,11 +138,10 @@ func _on_choice_4_pressed() -> void:
 	_check_answer()
 	
 func _check_answer():
+	if question_count == 0:
+		question_count = mc_questions.size()
 	#On correct answer
 	if answer == correct_answer:
-		Global.Snekker_HP -= 10
-		Global.Giant_Enemy_Crab_HP -= 10
-		Global.guardian_enemy_hp -= 10
 		correct_sfx.play()
 		camera.apply_shake()
 		visible=false
@@ -150,6 +151,10 @@ func _check_answer():
 		mc_questions.remove_at(index)
 		if Global.is_online:
 			mc_choice_ids.remove_at(index)
+		var hp: int = Global.quiz_boss_hp(mc_questions.size(), question_count)
+		Global.Snekker_HP = hp
+		Global.Giant_Enemy_Crab_HP = hp
+		Global.guardian_enemy_hp = hp
 	#On wrong answer
 	else:
 		print("Incorrect answer")
@@ -162,6 +167,13 @@ func _check_answer():
 	Global.guardian_enemy_question = false
 
 func _on_draw() -> void:
+	if mc_questions.is_empty():
+		# A quiz with no questions can't be fought: end it rather than index an empty pool.
+		Global.Snekker_HP = 0
+		Global.Giant_Enemy_Crab_HP = 0
+		Global.guardian_enemy_hp = 0
+		visible = false
+		return
 	index = _choose_question()
 	print("Questions: ")
 	print(mc_questions)
