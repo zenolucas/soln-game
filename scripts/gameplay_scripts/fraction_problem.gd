@@ -164,11 +164,6 @@ func _display_question():
 	if question_index == current_chosen_questions.size():
 		print("no more questions")
 		_disable_questions()
-		match DialogueState.current_quest:
-			"saisai_wheelbarrow":
-				Statistics.update_saisai_statistics(num_right_ans, num_wrong_ans)
-			"dead_robots":
-				Statistics.update_dead_robot_statistics(num_right_ans, num_wrong_ans)
 		
 	else :
 		# reset num of right and wrong answers
