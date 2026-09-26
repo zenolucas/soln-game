@@ -90,7 +90,8 @@ func get_questions(minigame_id):
 
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.request_completed.connect(self._http_request_completed)
+	# Bind this request's own minigame: another load can change the shared minigame_id before this one returns.
+	http_request.request_completed.connect(self._http_request_completed.bind(minigame_id))
 
 	var json_body = JSON.stringify(post_data)
 	var headers = ["Content-type: application/json"]
@@ -101,37 +102,37 @@ func get_questions(minigame_id):
 		print("error: unable to make request")
 		
 # Called when the HTTP request is completed.
-func _http_request_completed(_result, response_code, _headers, body):
+func _http_request_completed(_result, response_code, _headers, body, requested_minigame_id):
 	if response_code == 200:
 		var json = JSON.new()
 		var error = json.parse(body.get_string_from_utf8())
 		if error == OK:
 			var response = json.get_data()
-			if minigame_id == 1:
+			if requested_minigame_id == 1:
 				saisai_questions = constructFractionQuestions(response, "+")
-			elif minigame_id == 2:
+			elif requested_minigame_id == 2:
 				robot_questions = constructFractionQuestions(response, "+")
-			elif minigame_id == 3:
+			elif requested_minigame_id == 3:
 				racket_steal_questions = constructWordedQuestions(response)
-			elif minigame_id == 4:
+			elif requested_minigame_id == 4:
 				racket_house_questions = constructWordedQuestions(response)
-			elif minigame_id == 5:
+			elif requested_minigame_id == 5:
 				snekkers_questions = constructQuizQuestions(response)
 				snekkers_choice_ids = getChoiceIDs(response)
-			elif minigame_id == 6:
+			elif requested_minigame_id == 6:
 				water1_questions = constructFractionQuestions(response, "-")
-			elif minigame_id == 7:
+			elif requested_minigame_id == 7:
 				chip_questions = constructFractionQuestions(response, "-")
-			elif minigame_id == 8:
+			elif requested_minigame_id == 8:
 				water2_questions = constructFractionQuestions(response, "-")
-			elif minigame_id == 9:
+			elif requested_minigame_id == 9:
 				water3_questions = constructFractionQuestions(response, "-")
-			elif minigame_id == 10:
+			elif requested_minigame_id == 10:
 				rat_questions = constructWordedQuestions(response)
-			elif minigame_id == 11:
+			elif requested_minigame_id == 11:
 				crab_questions = constructQuizQuestions(response)
 				crab_choice_ids = getChoiceIDs(response)
-			elif minigame_id == 12:
+			elif requested_minigame_id == 12:
 				final_boss_questions = constructQuizQuestions(response)
 				final_boss_choice_ids = getChoiceIDs(response)
 			
