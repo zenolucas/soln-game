@@ -76,6 +76,10 @@ func randomize_questions(questions_array: Array, current_chosen_questions: Array
 	
 	return current_chosen_questions
 
+# Headers for requests that read or write this student's data (the server rejects them without the token).
+func auth_headers() -> PackedStringArray:
+	return PackedStringArray(["Content-type: application/json", "Authorization: Bearer " + PlayerState.game_token])
+
 func add_energy():
 	if user_energy >= 5:
 		return

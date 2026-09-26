@@ -11,6 +11,8 @@ var player_in_dialogue: bool = false
 var player_username: String = "Sol'n"
 var classroom_id = 1
 var student_id = 3
+# Issued by /game/login; sent back as a Bearer token on save and statistics requests.
+var game_token: String = ""
 
 var player_badges = {
 	"shiny_rock": false,
