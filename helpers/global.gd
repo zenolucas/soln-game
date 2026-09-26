@@ -44,41 +44,28 @@ func choose_question(question_array_size: Array) -> int:
 
 # 1st parameter: Array of questions to be chosen
 # 2nd parameter: Array of chosen questions
-# 3rd parameter: Track the questions that have been chosen
+# 3rd parameter: Track the questions that have been chosen (indices into the 1st parameter)
+# Picks up to 3 distinct questions at random. A teacher can leave fewer than 3 in a scene, so this takes
+# min(3, available) instead of waiting for 3, and shuffles indices so a question can't be picked twice.
 func randomize_questions(questions_array: Array, current_chosen_questions: Array, chosen_index_questions: Array[int]) -> Array:
-	var is_chosen = false
-	
-	while chosen_index_questions.size() != 3:
-		var random_number_question = choose_question(questions_array)
-
-		for current_chosen_index_question in chosen_index_questions:
-			print("Current random number question is ",random_number_question)
-			print("Current chosen index ", current_chosen_index_question)
-			if current_chosen_index_question == random_number_question:
-				print("Make is_chosen true")
-				is_chosen = true
-		
-		# If already added question dont add
-		if is_chosen:
-			print("Question already added")
-			is_chosen = false
-		
-		# Add if question is new
-		elif !is_chosen: 
-			if Global.is_online:
-				chosen_index_questions.append(int(questions_array[random_number_question][5]) - 1)
-				current_chosen_questions.append(questions_array[random_number_question])
-			else:
-				chosen_index_questions.append(int(questions_array[random_number_question][5]))
-				current_chosen_questions.append(questions_array[random_number_question])
-	
+	var order := range(questions_array.size())
+	order.shuffle()
+	for i in order.slice(0, mini(3, questions_array.size())):
+		chosen_index_questions.append(i)
+		current_chosen_questions.append(questions_array[i])
 	print("Current chosen index question are ", chosen_index_questions)
-	
 	return current_chosen_questions
 
 # Headers for requests that read or write this student's data (the server rejects them without the token).
 func auth_headers() -> PackedStringArray:
 	return PackedStringArray(["Content-type: application/json", "Authorization: Bearer " + PlayerState.game_token])
+
+# A quiz boss's HP once `remaining` of `total` questions are left: 100 at the start, exactly 0 after the
+# last correct answer, whatever the quiz length (a fixed 10 per hit only works for exactly 10 questions).
+func quiz_boss_hp(remaining: int, total: int) -> int:
+	if total <= 0:
+		return 0
+	return roundi(100.0 * remaining / total)
 
 func add_energy():
 	if user_energy >= 5:

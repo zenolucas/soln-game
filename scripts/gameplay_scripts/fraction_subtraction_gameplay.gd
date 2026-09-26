@@ -93,6 +93,10 @@ func initiate_questions():
 
 # Display the current question and update the label text
 func display_current_question():
+	if fraction_questions.is_empty():
+		# No questions for this scene: finish it instead of indexing an empty list.
+		next_question_or_finish()
+		return
 	# reset right and wrong ans count
 	num_right_ans = 0
 	num_wrong_ans = 0
