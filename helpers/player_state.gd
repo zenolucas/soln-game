@@ -118,7 +118,11 @@ func _notification(notification) -> void:
 		}
 
 		##part where you write the player stuff onto the database
-		if Global.is_online:
+		# Without a successful load this is the default state, not the student's: posting it would
+		# overwrite their real save.
+		if Global.is_online and not SaveState.load_success:
+			print("Not saving: this session's save never loaded")
+		elif Global.is_online:
 			print("curently saving... ")
 			print(save_data)
 			SaveState.post_save_data(save_data)
