@@ -42,7 +42,7 @@ func load_save_data(student_id):
 	print("load_save_data is triggered")
 	# Stays false until this load succeeds, so a failed load can never be saved over the real save.
 	load_success = false
-	var url = "http://"+ Global.host_ip +":3000/game/getsavedata"
+	var url = Global.server_url("/game/getsavedata")
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	http_request.request_completed.connect(self._http_request_completed)
@@ -106,7 +106,7 @@ func _http_request_completed(_result, response_code, _headers, body):
 # ----------------------- SENDING SAVED DATA TO SERVER --------------------------------
 
 func post_save_data(save_data):
-	var url = "http://"+ Global.host_ip +":3000/game/postsavedata"
+	var url = Global.server_url("/game/postsavedata")
 	print(url)
 	
 	var http_request = HTTPRequest.new()

@@ -82,11 +82,11 @@ func get_questions(minigame_id):
 	var url 
 
 	if minigame_id == 1 || minigame_id == 2 || minigame_id == 6 || minigame_id == 7 || minigame_id == 8 || minigame_id == 9:
-		url = "http://"+ Global.host_ip +":3000/game/getfractions"
+		url = Global.server_url("/game/getfractions")
 	elif minigame_id == 3 || minigame_id == 4 || minigame_id == 10:
-		url = "http://"+ Global.host_ip +":3000/game/getworded"
+		url = Global.server_url("/game/getworded")
 	elif minigame_id == 5 || minigame_id == 11 || minigame_id == 12:
-		url = "http://"+ Global.host_ip +":3000/game/getmcquestions"	
+		url = Global.server_url("/game/getmcquestions")	
 
 	var http_request = HTTPRequest.new()
 	add_child(http_request)

@@ -10,7 +10,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func post_fraction_statistics(classroom_id, student_id, question_id, minigame_id, num_right_attempts, num_wrong_attempts):
-	var url = "http://"+ Global.host_ip +":3000/game/add/statistics/fraction"
+	var url = Global.server_url("/game/add/statistics/fraction")
 	
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -36,7 +36,7 @@ func post_fraction_statistics(classroom_id, student_id, question_id, minigame_id
 		print("error: unable to make request")
 
 func postQuizResponse(classroomID, minigameID, questionID, studentID, choiceID):
-	var url = "http://"+ Global.host_ip +":3000/game/add/statistics/quiz/response"
+	var url = Global.server_url("/game/add/statistics/quiz/response")
 	print(url)
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -59,7 +59,7 @@ func postQuizResponse(classroomID, minigameID, questionID, studentID, choiceID):
 		print("error: unable to make request")
 		
 func postQuizScore(studentID, classroomID, minigameID, score):
-	var url = "http://"+ Global.host_ip +":3000/game/add/statistics/quiz"
+	var url = Global.server_url("/game/add/statistics/quiz")
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	http_request.request_completed.connect(self._http_request_completed)

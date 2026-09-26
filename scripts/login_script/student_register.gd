@@ -22,7 +22,7 @@ func _ready():
 func _on_register_button_button_down():
 	print("Current IP address: ", ip_address_input.text)
 	Global.host_ip = ip_address_input.text
-	register_url = "http://" + Global.host_ip + ":3000/game/register"
+	register_url = Global.server_url("/game/register")
 	
 	var credentials = {
 		"firstname": first_name.text,
