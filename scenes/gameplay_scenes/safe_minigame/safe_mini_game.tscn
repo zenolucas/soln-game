@@ -217,23 +217,6 @@ libraries = {
 visible = false
 next_scene = ExtResource("8_o2j1d")
 
-[node name="MarginContainer2" parent="Congrats" index="1"]
-offset_left = -33.0
-offset_top = -8.0
-offset_right = 403.0
-offset_bottom = 244.0
-
-[node name="Label" parent="Congrats/MarginContainer2/MarginContainer" index="0"]
-text = "Congratulations:
-You have opened
-the safe"
-
-[node name="correct" parent="Congrats" index="2"]
-offset_left = 38.0
-offset_top = 131.0
-offset_right = 317.269
-offset_bottom = 195.269
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
@@ -249,14 +232,8 @@ volume_db = -14.991
 
 [node name="EnergyBar" parent="." instance=ExtResource("11_4n2je")]
 layout_mode = 1
-offset_left = -280.889
-offset_top = -294.667
-offset_right = -280.889
-offset_bottom = -294.667
-scale = Vector2(5, 5)
 
 [connection signal="all_done" from="FractionProblem" to="." method="_on_fraction_problem_all_done"]
 [connection signal="correct" from="FractionProblem" to="." method="_on_fraction_problem_correct"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 
-[editable path="Congrats"]

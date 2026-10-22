@@ -245,11 +245,6 @@ color = Color(0.207843, 0.168627, 0.25098, 1)
 
 [node name="EnergyBar" parent="." instance=ExtResource("2_iw1wy")]
 layout_mode = 1
-offset_left = 212.632
-offset_top = 11.5789
-offset_right = 212.632
-offset_bottom = 11.5789
-scale = Vector2(4, 4)
 
 [node name="question" type="MarginContainer" parent="."]
 layout_mode = 0

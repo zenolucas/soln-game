@@ -75,12 +75,6 @@ texture_progress = ExtResource("4_xl110")
 visible = false
 next_scene = ExtResource("6_ayggq")
 
-[node name="Label" parent="Congrats/MarginContainer2/MarginContainer" index="0"]
-text = "Congratulations:
-You have
-successfully
-drained the room"
-
 [node name="CorrectSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_m3mik")
 volume_db = -17.802
@@ -92,12 +86,6 @@ autoplay = true
 
 [node name="EnergyBar" parent="." instance=ExtResource("9_5hb1f")]
 layout_mode = 1
-offset_left = -253.444
-offset_top = -262.444
-offset_right = -253.444
-offset_bottom = -262.444
-scale = Vector2(5, 5)
 
 [connection signal="correct" from="FractionProblem" to="." method="_on_fraction_problem_correct"]
 
-[editable path="Congrats"]

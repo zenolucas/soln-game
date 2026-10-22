@@ -1,137 +1,59 @@
-[gd_scene load_steps=7 format=3 uid="uid://qi0gyl783jj2"]
+[gd_scene load_steps=2 format=3 uid="uid://qi0gyl783jj2"]
 
 [ext_resource type="Script" path="res://scripts/ui/congratulations.gd" id="1_cssuj"]
-[ext_resource type="Texture2D" uid="uid://f4a5kyl64epc" path="res://assets/ui/tex_box/speech_bubble.png" id="1_ugg6p"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_ucdyl"]
-
-[sub_resource type="Animation" id="Animation_owg8m"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(52, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(104, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
-[sub_resource type="Animation" id="Animation_5amkk"]
-resource_name = "bobbing_default"
-loop_mode = 1
-step = 0.1
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(52, -0.25, 0, 0.25, 0, 52, -0.25, 0, 0.25, 0, 52, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.5, 1)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(104, -0.25, 0, 0.25, 0, 112, -0.25, 0, 0.25, 0, 104, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.5, 1)
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wx2nw"]
-_data = {
-"RESET": SubResource("Animation_owg8m"),
-"bobbing_default": SubResource("Animation_5amkk")
-}
 
 [node name="Congrats" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 324.0
-offset_top = 187.0
-offset_right = 364.0
-offset_bottom = 227.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_cssuj")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Dim" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -338.0
-offset_top = -199.0
-offset_right = 672.0
-offset_bottom = 362.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.207843, 0.168627, 0.25098, 1)
+theme_type_variation = &"Dim"
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_right = 374.0
-offset_bottom = 204.0
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer2"]
+[node name="Card" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(448, 0)
 layout_mode = 2
-texture = ExtResource("1_ugg6p")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
+theme_type_variation = &"Card"
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2"]
+[node name="VBox" type="VBoxContainer" parent="Center/Card"]
 layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 100
+theme_override_constants/separation = 24
 
-[node name="Label" type="Label" parent="MarginContainer2/MarginContainer"]
+[node name="Title" type="Label" parent="Center/Card/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_fonts/font = ExtResource("2_ucdyl")
-text = "Congratulations:
-You have perfectly 
-followed the recipe"
+theme_type_variation = &"TitleLabel"
+text = "Well done!"
 horizontal_alignment = 1
 
-[node name="correct" type="Button" parent="."]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 104.0
-offset_right = 331.269
-offset_bottom = 168.269
-size_flags_vertical = 8
-theme_override_colors/font_hover_pressed_color = Color(0.27451, 0.227451, 0.329412, 1)
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.276189, 0.227463, 0.329893, 1)
-theme_override_fonts/font = ExtResource("2_ucdyl")
-theme_override_font_sizes/font_size = 50
+[node name="Label" type="Label" parent="Center/Card/VBox"]
+layout_mode = 2
+text = "You have perfectly followed the recipe."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="correct" type="Button" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PrimaryButton"
 text = "OK"
-flat = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="correct"]
-libraries = {
-"": SubResource("AnimationLibrary_wx2nw")
-}
-autoplay = "bobbing_default"
-
-[connection signal="pressed" from="correct" to="." method="_on_correct_pressed"]
+[connection signal="pressed" from="Center/Card/VBox/correct" to="." method="_on_correct_pressed"]

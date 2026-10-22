@@ -272,11 +272,6 @@ color = Color(0.207843, 0.168627, 0.25098, 1)
 
 [node name="EnergyBar" parent="." instance=ExtResource("2_bpkib")]
 layout_mode = 1
-offset_left = -286.0
-offset_top = -229.0
-offset_right = -286.0
-offset_bottom = -229.0
-scale = Vector2(5, 5)
 
 [node name="board" type="MarginContainer" parent="."]
 layout_mode = 0

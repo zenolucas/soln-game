@@ -27,6 +27,7 @@ var guardian_enemy_hp = 100
 var guardian_enemy_current_hp = 100
 var guardian_enemy_question = false
 
+const MAX_ENERGY := 5
 var user_energy = 3
 
 # tutorial
@@ -85,6 +86,6 @@ func quiz_boss_hp(remaining: int, total: int) -> int:
 	return roundi(100.0 * remaining / total)
 
 func add_energy():
-	if user_energy >= 5:
+	if user_energy >= MAX_ENERGY:
 		return
 	user_energy += 1
