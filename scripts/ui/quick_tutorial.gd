@@ -12,6 +12,8 @@ const GAP := 16.0
 const CARD_SIZE := Vector2(400, 208)
 
 @onready var close_button: Button = $Close/CloseButton
+# Whatever had focus before the tutorial took it; handed back when the tutorial closes.
+var _previous_focus: Control
 
 func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
@@ -20,13 +22,20 @@ func _ready() -> void:
 
 func _on_visibility_changed() -> void:
 	if not is_visible_in_tree():
+		var next_shown := next != null and next.visible
+		if not next_shown and is_instance_valid(_previous_focus) and _previous_focus.is_visible_in_tree():
+			_previous_focus.grab_focus.call_deferred()
 		return
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused and not is_ancestor_of(focused):
+		_previous_focus = focused
 	if target:
 		_fit_to_target.call_deferred()
 	close_button.grab_focus.call_deferred()
 
 func _on_close_button_pressed() -> void:
 	if next != null:
+		next._previous_focus = _previous_focus
 		next.visible = true
 	visible = false
 
