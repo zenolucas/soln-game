@@ -1,11 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://b5urnt05hl4eu"]
+[gd_scene load_steps=9 format=3 uid="uid://b5urnt05hl4eu"]
 
+[ext_resource type="Script" path="res://scripts/login_script/student_main_menu.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://c6dgj1k2tddmy" path="res://assets/background/Lighthouse_movement.png" id="1_axrn5"]
-[ext_resource type="Script" path="res://scripts/login_script/student_main_menu.gd" id="1_cihcj"]
-[ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="2_cuid1"]
-[ext_resource type="Script" path="res://scripts/login_script/soln_bg_animation.gd" id="2_nubq2"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="4_u5qk6"]
-[ext_resource type="PackedScene" uid="uid://bcui7ofr241ek" path="res://scenes/student_scene/hide_password.tscn" id="5_yjt28"]
+[ext_resource type="PackedScene" uid="uid://bcui7ofr241ek" path="res://scenes/student_scene/hide_password.tscn" id="5_hide"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5ciok"]
 atlas = ExtResource("1_axrn5")
@@ -43,134 +40,141 @@ animations = [{
 "speed": 2.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a0h5"]
-
 [node name="StudentLoginControl" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-scale = Vector2(1.0801, 1.11425)
-script = ExtResource("1_cihcj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Background" type="AnimatedSprite2D" parent="."]
+position = Vector2(512, 288)
+scale = Vector2(2.00804, 2.05082)
+sprite_frames = SubResource("SpriteFrames_d42gl")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Dim" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(6.46513, 4.57422)
-metadata/_edit_use_anchors_ = true
+color = Color(0.180392, 0.203922, 0.25098, 0.6)
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="Panel"]
-texture_filter = 1
-scale = Vector2(1.00145, 1.00297)
-script = ExtResource("2_nubq2")
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Soln_background" type="AnimatedSprite2D" parent="Panel/CharacterBody2D"]
-position = Vector2(82.6528, 63.772)
-scale = Vector2(0.287117, 0.400985)
-sprite_frames = SubResource("SpriteFrames_d42gl")
-animation = &"idle"
-frame_progress = 0.0651652
+[node name="Card" type="PanelContainer" parent="Center"]
+layout_mode = 2
+theme_type_variation = &"Card"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Panel/CharacterBody2D"]
-visible = false
-position = Vector2(75.0395, 166.771)
-shape = SubResource("RectangleShape2D_5a0h5")
+[node name="Form" type="VBoxContainer" parent="Center/Card"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="StudentInformation" type="NinePatchRect" parent="."]
-layout_mode = 0
-offset_left = 164.8
-offset_top = 106.798
-offset_right = 1228.8
-offset_bottom = 682.797
+[node name="Title" type="Label" parent="Center/Card/Form"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Student login"
 
-[node name="IPAddress" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 421.257
-offset_top = 144.492
-offset_right = 659.257
-offset_bottom = 175.492
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("2_cuid1")
-placeholder_text = "Server (IP or https:// URL)"
+[node name="Hint" type="Label" parent="Center/Card/Form"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Ask your teacher for the server address."
+autowrap_mode = 3
+
+[node name="IPAddressField" type="VBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/IPAddressField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Server"
+
+[node name="IPAddress" type="LineEdit" parent="Center/Card/Form/IPAddressField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "IP or https:// address"
 caret_blink = true
 
-[node name="Username" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 421.257
-offset_top = 185.775
-offset_right = 659.257
-offset_bottom = 216.775
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("2_cuid1")
+[node name="UsernameField" type="VBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/UsernameField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Username"
+
+[node name="Username" type="LineEdit" parent="Center/Card/Form/UsernameField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
 placeholder_text = "Username"
 caret_blink = true
 
-[node name="Password" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 421.257
-offset_top = 228.854
-offset_right = 658.257
-offset_bottom = 259.854
-theme_override_fonts/font = ExtResource("2_cuid1")
+[node name="PasswordField" type="VBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/PasswordField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Password"
+
+[node name="PasswordRow" type="HBoxContainer" parent="Center/Card/Form/PasswordField"]
+layout_mode = 2
+
+[node name="Password" type="LineEdit" parent="Center/Card/Form/PasswordField/PasswordRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "Password"
 caret_blink = true
 secret = true
 
-[node name="HidePassword" parent="StudentInformation/Password" instance=ExtResource("5_yjt28")]
-layout_mode = 0
-offset_left = 188.872
-offset_top = 3.59037
-offset_right = 232.872
-offset_bottom = 27.5904
+[node name="HidePassword" parent="Center/Card/Form/PasswordField/PasswordRow" instance=ExtResource("5_hide")]
+layout_mode = 2
 
-[node name="LoginButton" type="Button" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 493.473
-offset_top = 288.086
-offset_right = 577.473
-offset_bottom = 319.086
-theme_override_fonts/font = ExtResource("4_u5qk6")
-text = "Login"
-flat = true
+[node name="ErrorLabel" type="Label" parent="Center/Card/Form"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"FeedbackError"
+autowrap_mode = 3
 
-[node name="StudentLogin" type="RichTextLabel" parent="."]
-texture_filter = 1
-layout_mode = 0
-offset_left = 596.241
-offset_top = 215.392
-offset_right = 791.241
-offset_bottom = 255.392
-theme_override_fonts/normal_font = ExtResource("4_u5qk6")
-text = "Student Login"
+[node name="Buttons" type="HBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+theme_override_constants/separation = 12
 
-[node name="ErrorLabel" type="RichTextLabel" parent="."]
-self_modulate = Color(0.576471, 0.247059, 0.270588, 1)
-layout_mode = 0
-offset_left = 533.284
-offset_top = 371.55
-offset_right = 930.284
-offset_bottom = 397.55
-theme_override_fonts/normal_font = ExtResource("2_cuid1")
-scroll_active = false
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(535.136, 292.574)
-rotation = -3.14159
-scale = Vector2(1029.97, -605.692)
-
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 118.508
-offset_top = 71.7972
-offset_right = 165.508
-offset_bottom = 95.7972
+[node name="BackButton" type="Button" parent="Center/Card/Form/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
 text = "BACK"
 
-[connection signal="button_down" from="StudentInformation/LoginButton" to="." method="_on_login_button_button_down"]
-[connection signal="button_down" from="BackButton" to="." method="_on_back_button_button_down"]
+[node name="LoginButton" type="Button" parent="Center/Card/Form/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+text = "LOG IN"
+
+[connection signal="pressed" from="Center/Card/Form/Buttons/LoginButton" to="." method="_on_login_button_button_down"]
+[connection signal="pressed" from="Center/Card/Form/Buttons/BackButton" to="." method="_on_back_button_button_down"]
