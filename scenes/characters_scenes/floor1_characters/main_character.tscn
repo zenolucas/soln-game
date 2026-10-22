@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://50xwge6vcpc3"]
+[gd_scene load_steps=65 format=3 uid="uid://50xwge6vcpc3"]
 
 [ext_resource type="Script" path="res://scripts/character_scripts/main_character.gd" id="1_vdtrp"]
 [ext_resource type="PackedScene" uid="uid://dl2yfrm37a7ju" path="res://scenes/cutscenes/general/objective_overlay.tscn" id="2_n3dp3"]
@@ -14,14 +14,12 @@
 [ext_resource type="Script" path="res://scripts/states/state_machine.gd" id="7_u7ptv"]
 [ext_resource type="Script" path="res://scripts/states/idle_state.gd" id="8_5n5vl"]
 [ext_resource type="Texture2D" uid="uid://8ubg4diy2ger" path="res://assets/main_character/onscreen_badges/Sword Badge.png" id="8_make3"]
-[ext_resource type="Texture2D" uid="uid://f4a5kyl64epc" path="res://assets/ui/tex_box/speech_bubble.png" id="9_3lima"]
 [ext_resource type="AudioStream" uid="uid://ss166am0xg8v" path="res://audio/sound_effects/Computer Startup SFX.wav" id="9_4p2n0"]
 [ext_resource type="Script" path="res://scripts/ui/pause_screen.gd" id="9_afhlo"]
 [ext_resource type="Script" path="res://scripts/states/moving_state.gd" id="9_bdkni"]
 [ext_resource type="Texture2D" uid="uid://dtef73npb8nio" path="res://assets/main_character/onscreen_badges/Water Bucket 1 Badge.png" id="9_jud13"]
 [ext_resource type="Texture2D" uid="uid://c2anop6ampj3j" path="res://assets/main_character/onscreen_badges/Mushroom Badge.png" id="9_spg6v"]
 [ext_resource type="Texture2D" uid="uid://yw8flaurllbs" path="res://assets/main_character/onscreen_badges/Crystal Ball Badge.png" id="10_2wnpe"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="10_grd3n"]
 [ext_resource type="Script" path="res://scripts/states/player_dialogue_state.gd" id="10_uarnf"]
 [ext_resource type="Texture2D" uid="uid://c7f6foub77gy8" path="res://assets/main_character/onscreen_badges/Flask Badge.png" id="11_ggigp"]
 [ext_resource type="Texture2D" uid="uid://bq3ljnky3w0vb" path="res://assets/main_character/onscreen_badges/Water Bucket 2 Badge.png" id="12_wlmo8"]
@@ -374,17 +372,10 @@ script = ExtResource("1_vdtrp")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="ObjectiveOverlay" parent="UI" instance=ExtResource("2_n3dp3")]
-offset_left = 70.0
-offset_top = 71.0
-offset_right = 70.0
-offset_bottom = 71.0
-scale = Vector2(4, 4)
-
-[node name="Label" parent="UI/ObjectiveOverlay" index="0"]
-offset_left = -11.5
-offset_top = -9.75
-offset_right = 888.5
-offset_bottom = 300.25
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 16.0
+offset_bottom = 16.0
 
 [node name="OnscreenBadges" type="Control" parent="UI"]
 z_index = 99
@@ -403,9 +394,9 @@ offset_left = 190.5
 offset_top = -65.5
 offset_right = 329.5
 offset_bottom = -29.5
-scale = Vector2(0.2, 0.2)
-theme_override_font_sizes/font_size = 28
-text = "Badges"
+scale = Vector2(0.25, 0.25)
+theme_type_variation = &"HUDLabel"
+text = "BADGES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -545,100 +536,64 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("15_bfv3w")
 
 [node name="PauseScreen" type="Control" parent="UI"]
-visible = false
 process_mode = 3
+visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.5, 0.5)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("9_afhlo")
 
-[node name="ColorRect" type="ColorRect" parent="UI/PauseScreen"]
+[node name="Dim" type="Panel" parent="UI/PauseScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -11.0
-offset_top = -10.0
-offset_right = 2024.0
-offset_bottom = 1124.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.207843, 0.168627, 0.25098, 0.8)
+theme_type_variation = &"Dim"
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/PauseScreen"]
+[node name="Center" type="CenterContainer" parent="UI/PauseScreen"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 768.0
-offset_top = 418.0
-offset_right = 1254.0
-offset_bottom = 659.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="UI/PauseScreen/MarginContainer2"]
+[node name="Card" type="PanelContainer" parent="UI/PauseScreen/Center"]
 layout_mode = 2
-texture = ExtResource("9_3lima")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
+theme_type_variation = &"Card"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseScreen/MarginContainer2"]
+[node name="VBox" type="VBoxContainer" parent="UI/PauseScreen/Center/Card"]
+custom_minimum_size = Vector2(288, 0)
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 12
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/PauseScreen/MarginContainer2/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/PauseScreen/Center/Card/VBox"]
 layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 10
-
-[node name="Label" type="Label" parent="UI/PauseScreen/MarginContainer2/VBoxContainer/MarginContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_fonts/font = ExtResource("10_grd3n")
-theme_override_font_sizes/font_size = 30
-text = "Game is paused"
+theme_type_variation = &"TitleLabel"
+text = "Paused"
 horizontal_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/PauseScreen/MarginContainer2/VBoxContainer"]
+[node name="Back" type="Button" parent="UI/PauseScreen/Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+theme_type_variation = &"PrimaryButton"
+text = "RESUME"
 
-[node name="Back" type="Button" parent="UI/PauseScreen/MarginContainer2/VBoxContainer/MarginContainer2"]
+[node name="MainMenu" type="Button" parent="UI/PauseScreen/Center/Card/VBox"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_colors/font_hover_pressed_color = Color(0.27451, 0.227451, 0.329412, 1)
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.276189, 0.227463, 0.329893, 1)
-theme_override_fonts/font = ExtResource("10_grd3n")
-theme_override_font_sizes/font_size = 50
-text = "BACK"
-flat = true
-
-[node name="MarginContainer3" type="MarginContainer" parent="UI/PauseScreen/MarginContainer2/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
-
-[node name="MainMenu" type="Button" parent="UI/PauseScreen/MarginContainer2/VBoxContainer/MarginContainer3"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_colors/font_hover_pressed_color = Color(0.27451, 0.227451, 0.329412, 1)
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.276189, 0.227463, 0.329893, 1)
-theme_override_fonts/font = ExtResource("10_grd3n")
-theme_override_font_sizes/font_size = 50
 text = "MAIN MENU"
-flat = true
+
+[node name="Hint" type="Label" parent="UI/PauseScreen/Center/Card/VBox"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Press Esc to resume."
+horizontal_alignment = 1
 
 [node name="StartupSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_4p2n0")
@@ -715,8 +670,6 @@ drag_top_margin = 0.1
 drag_right_margin = 0.1
 drag_bottom_margin = 0.1
 
-[connection signal="pressed" from="UI/PauseScreen/MarginContainer2/VBoxContainer/MarginContainer2/Back" to="UI/PauseScreen" method="_on_back_pressed"]
-[connection signal="pressed" from="UI/PauseScreen/MarginContainer2/VBoxContainer/MarginContainer3/MainMenu" to="UI/PauseScreen" method="_on_main_menu_pressed"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 

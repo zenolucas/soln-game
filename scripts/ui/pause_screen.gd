@@ -18,6 +18,7 @@ func _pause():
 	get_tree().paused = true
 	objective.visible = false
 	badges.visible = false
+	$Center/Card/VBox/Back.grab_focus()
 
 func _on_back_pressed() -> void:
 	hide()
