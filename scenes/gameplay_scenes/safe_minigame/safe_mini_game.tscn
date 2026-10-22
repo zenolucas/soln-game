@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://qj4ux4unjrtb"]
 
 [ext_resource type="Script" path="res://scenes/gameplay_scenes/safe_minigame/safe_mini_game.gd" id="1_68juf"]
-[ext_resource type="Texture2D" uid="uid://kex21phpt41e" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/button_box.png" id="1_b05pv"]
+[ext_resource type="Texture2D" uid="uid://bv3a2d1hqjlgy" path="res://assets/character_portraits/Chip.png" id="1_b05pv"]
 [ext_resource type="PackedScene" uid="uid://dkqfovnosijms" path="res://scenes/gameplay_scenes/fraction_problem.tscn" id="2_7cpns"]
 [ext_resource type="Texture2D" uid="uid://d4lgw4mbdykeu" path="res://scenes/gameplay_scenes/safe_minigame/safe.png" id="2_vk0uk"]
 [ext_resource type="Texture2D" uid="uid://bm0qrmx2u7mct" path="res://scenes/gameplay_scenes/safe_minigame/inner_dial.png" id="3_h2cti"]
@@ -17,7 +17,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("board:self_modulate")
+tracks/0/path = NodePath("FractionProblem:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -29,34 +29,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("board:modulate")
+tracks/1/path = NodePath("FractionProblem:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FractionProblem:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("FractionProblem:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -69,7 +45,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("board:self_modulate")
+tracks/0/path = NodePath("FractionProblem:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -81,34 +57,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("board:modulate")
+tracks/1/path = NodePath("FractionProblem:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FractionProblem:self_modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("FractionProblem:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -126,25 +78,29 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 113.0
-offset_top = 78.0
-offset_right = 113.0
-offset_bottom = 78.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.8, 0.8)
 script = ExtResource("1_68juf")
 
 [node name="bg" type="ColorRect" parent="."]
-self_modulate = Color(0.729412, 0.729412, 0.729412, 1)
-layout_mode = 0
-offset_left = -156.0
-offset_top = -109.0
-offset_right = 1150.0
-offset_bottom = 646.0
-color = Color(0.207843, 0.168627, 0.25098, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.180392, 0.203922, 0.25098, 1)
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Art" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 113.0
+offset_top = 78.0
+offset_right = 153.0
+offset_bottom = 118.0
+scale = Vector2(0.8, 0.8)
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Art"]
 layout_mode = 0
 offset_left = -67.0
 offset_top = 5.0
@@ -153,31 +109,7 @@ offset_bottom = 133.0
 scale = Vector2(4.5, 4.5)
 texture = ExtResource("2_vk0uk")
 
-[node name="board" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 103.0
-offset_top = 70.0
-offset_right = 343.0
-offset_bottom = 245.0
-scale = Vector2(2.6, 2.6)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="board"]
-layout_mode = 2
-texture = ExtResource("1_b05pv")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="FractionProblem" parent="." instance=ExtResource("2_7cpns")]
-layout_mode = 2
-offset_left = 103.0
-offset_top = 70.0
-offset_right = 519.0
-offset_bottom = 372.0
-scale = Vector2(1.5, 1.5)
-
-[node name="safe_dial" type="Control" parent="."]
+[node name="safe_dial" type="Control" parent="Art"]
 anchors_preset = 0
 offset_left = 793.0
 offset_top = 220.0
@@ -185,7 +117,7 @@ offset_right = 833.0
 offset_bottom = 260.0
 scale = Vector2(3.3, 3.3)
 
-[node name="inner" type="TextureRect" parent="safe_dial"]
+[node name="inner" type="TextureRect" parent="Art/safe_dial"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -199,7 +131,7 @@ grow_vertical = 2
 pivot_offset = Vector2(32, 32)
 texture = ExtResource("3_h2cti")
 
-[node name="outer" type="TextureRect" parent="safe_dial"]
+[node name="outer" type="TextureRect" parent="Art/safe_dial"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,6 +139,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_5i4qd")
+
+[node name="FractionProblem" parent="." instance=ExtResource("2_7cpns")]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 72.0
+offset_right = 704.0
+offset_bottom = 552.0
+portrait_texture = ExtResource("1_b05pv")
 
 [node name="fade" type="AnimationPlayer" parent="."]
 libraries = {

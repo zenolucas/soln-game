@@ -1,6 +1,6 @@
 extends Control
 
-@onready var inner_dial = $safe_dial/inner
+@onready var inner_dial = $Art/safe_dial/inner
 @onready var congrats = $Congrats
 @onready var fade = $fade
 @onready var timer = $Timer

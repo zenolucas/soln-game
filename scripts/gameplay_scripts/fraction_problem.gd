@@ -169,7 +169,7 @@ func _build_ui() -> void:
 
 	frame.submitted.connect(_on_submit_answer_pressed)
 	answer_fraction.submitted.connect(_on_submit_answer_pressed)
-	frame.show_feedback("Type the answer, then press Enter or SUBMIT.")
+	frame.show_feedback("Type the answer, then press Enter.")
 
 func _load_questions():
 	print("current quest is ", DialogueState.current_quest)
