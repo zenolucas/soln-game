@@ -1,7 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6xwc5smmiwmn"]
-
-[ext_resource type="Texture2D" uid="uid://f4a5kyl64epc" path="res://assets/ui/tex_box/speech_bubble.png" id="1_7rom6"]
-[ext_resource type="FontFile" uid="uid://dgpj1y3a73vc" path="res://addons/gdUnit4/src/update/assets/fonts/static/RobotoMono-Bold.ttf" id="2_n0v00"]
+[gd_scene load_steps=4 format=3 uid="uid://b6xwc5smmiwmn"]
 
 [sub_resource type="Animation" id="Animation_pehjs"]
 length = 0.001
@@ -46,18 +43,11 @@ anchors_preset = 0
 offset_right = 32.0
 offset_bottom = 41.0
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="MarginContainer2" type="PanelContainer" parent="."]
 layout_mode = 2
+theme_type_variation = &"SpeechBox"
 offset_right = 32.0
 offset_bottom = 47.0
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer2"]
-layout_mode = 2
-texture = ExtResource("1_7rom6")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer2"]
 layout_mode = 2
@@ -68,8 +58,6 @@ theme_override_constants/margin_bottom = 15
 
 [node name="Label" type="Label" parent="MarginContainer2/MarginContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_fonts/font = ExtResource("2_n0v00")
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

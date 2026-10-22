@@ -3,32 +3,33 @@ extends Control
 @onready var objective = $"../ObjectiveOverlay"
 @onready var badges = $"../OnscreenBadges"
 
-func _process(delta: float) -> void:
-	if Input.is_action_just_released("pause"):
-		if !DialogueState.in_dialogue:
-			_pause()
+# PauseScreen runs while the tree is paused (process_mode = always), so Esc can also resume.
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_released("pause"):
+		return
+	if visible:
+		_on_back_pressed()
+	elif !DialogueState.in_dialogue:
+		_pause()
+	get_viewport().set_input_as_handled()
 
 func _pause():
 	show()
+	get_tree().paused = true
 	objective.visible = false
 	badges.visible = false
+	$Center/Card/VBox/Back.grab_focus()
 
 func _on_back_pressed() -> void:
-	print("unpaused")
 	hide()
+	get_tree().paused = false
 	PlayerState.player_in_dialogue = false
 	objective.visible = true
 	badges.visible = true
 
 func _on_main_menu_pressed() -> void:
-	print("main menu")
-	print(PlayerState.saved_scene)
-	print(Global.current_floor)
-	print(PlayerState.first_time_initializing_first_floor_scene)
+	get_tree().paused = false
 	var saved_position = $"../..".get_player_position()
-	var saved_scene = PlayerState.saved_scene
 	PlayerState.saved_position = saved_position
-	print("Current position: ", saved_position)
-	print("Current scene: ", saved_scene)
 	#part where you write the player stuff onto the database
 	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")

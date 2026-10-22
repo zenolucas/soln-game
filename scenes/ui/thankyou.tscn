@@ -1,13 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdf7d46axwoiq"]
+[gd_scene load_steps=2 format=3 uid="uid://cdf7d46axwoiq"]
 
-[ext_resource type="Texture2D" uid="uid://f4a5kyl64epc" path="res://assets/ui/tex_box/speech_bubble.png" id="1_jbt2q"]
 [ext_resource type="Script" path="res://scripts/ui/thankyou.gd" id="1_xi1eh"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_fo605"]
 
 [node name="ThankYou" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-scale = Vector2(0.5, 0.5)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_xi1eh")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -15,78 +16,46 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 2053.0
-offset_bottom = 1158.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.207843, 0.168627, 0.25098, 1)
+color = Color(0.180392, 0.203922, 0.25098, 1)
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 568.0
-offset_top = 334.0
-offset_right = 1462.0
-offset_bottom = 840.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer2"]
+[node name="Card" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
-texture = ExtResource("1_jbt2q")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
+theme_type_variation = &"Card"
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2"]
+[node name="VBox" type="VBoxContainer" parent="Center/Card"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+theme_override_constants/separation = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/MarginContainer"]
+[node name="Title" type="Label" parent="Center/Card/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 25
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 10
-
-[node name="Label" type="Label" parent="MarginContainer2/MarginContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_fonts/font = ExtResource("2_fo605")
-theme_override_font_sizes/font_size = 30
-text = "CONGRATULATIONS
-Thank you for bringing
-light back to the world.
-
-Thank you for playing"
+theme_type_variation = &"TitleLabel"
+text = "Congratulations!"
 horizontal_alignment = 1
 
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer2/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Center/Card/VBox"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+text = "Thank you for bringing light back to the world.
 
-[node name="MainMenu" type="Button" parent="MarginContainer2/MarginContainer/VBoxContainer/MarginContainer3"]
+Thank you for playing."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="MainMenu" type="Button" parent="Center/Card/VBox"]
+custom_minimum_size = Vector2(224, 48)
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_colors/font_hover_pressed_color = Color(0.27451, 0.227451, 0.329412, 1)
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.276189, 0.227463, 0.329893, 1)
-theme_override_fonts/font = ExtResource("2_fo605")
-theme_override_font_sizes/font_size = 50
+size_flags_horizontal = 4
+theme_type_variation = &"PrimaryButton"
 text = "MAIN MENU"
-flat = true
 
-[connection signal="pressed" from="MarginContainer2/MarginContainer/VBoxContainer/MarginContainer3/MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Center/Card/VBox/MainMenu" to="." method="_on_main_menu_pressed"]

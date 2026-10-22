@@ -1,25 +1,19 @@
-[gd_scene load_steps=42 format=3 uid="uid://d12j8haieiyg2"]
+[gd_scene load_steps=36 format=3 uid="uid://d12j8haieiyg2"]
 
 [ext_resource type="Script" path="res://scripts/gameplay_scripts/worded_to_fraction_gameplay.gd" id="1_2emhg"]
 [ext_resource type="PackedScene" uid="uid://0q0ebxluougn" path="res://scenes/ui/energy_bar.tscn" id="2_iw1wy"]
-[ext_resource type="Texture2D" uid="uid://f4a5kyl64epc" path="res://assets/ui/tex_box/speech_bubble.png" id="2_teu7h"]
-[ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="3_tmrgo"]
 [ext_resource type="Texture2D" uid="uid://bcwo6kvwrvp2x" path="res://assets/floor_1/npc/racoon ninja sprite.png" id="4_vo60v"]
 [ext_resource type="Texture2D" uid="uid://b8a3c1sdxsqwv" path="res://assets/floor_1/npc/reactions/happy racoon sprite.png" id="5_tgohp"]
 [ext_resource type="Texture2D" uid="uid://cwqgqjuufunw3" path="res://assets/floor_1/npc/Raket idle animation.png" id="5_xb7op"]
 [ext_resource type="Texture2D" uid="uid://c3kclf3andxv2" path="res://assets/floor_1/npc/reactions/unhappy racoon sprite.png" id="6_8exv4"]
-[ext_resource type="Texture2D" uid="uid://v37nxstby7g0" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/board.png" id="7_ys2jj"]
 [ext_resource type="Texture2D" uid="uid://bii2pqay365r6" path="res://assets/floor_1/npc/reactions/raket right answer.png" id="8_oied4"]
-[ext_resource type="Texture2D" uid="uid://brh6b8ufqdjks" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/board_box.png" id="8_s5m3f"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="9_2v7cv"]
 [ext_resource type="Texture2D" uid="uid://cq26hp0n7mmv2" path="res://assets/floor_1/npc/reactions/raket wrong answer.png" id="9_mn21t"]
-[ext_resource type="Texture2D" uid="uid://kex21phpt41e" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/button_box.png" id="10_ewn1i"]
 [ext_resource type="AudioStream" uid="uid://c5usoabj7ebry" path="res://audio/sound_effects/Correct Answer.wav" id="12_2iwgc"]
-[ext_resource type="Script" path="res://helpers/text_control.gd" id="12_vmkse"]
 [ext_resource type="AudioStream" uid="uid://d4gfci1awar1a" path="res://audio/sound_effects/Wrong Answer.wav" id="13_44j4r"]
 [ext_resource type="PackedScene" uid="uid://mmgnr4ih3lqk" path="res://scenes/ui/help_button_worded.tscn" id="15_dwrph"]
 [ext_resource type="PackedScene" uid="uid://bbry446v48htq" path="res://scenes/ui/quick_tutorial.tscn" id="15_mwakl"]
 [ext_resource type="AudioStream" uid="uid://bkt4jb8as3uie" path="res://audio/background_music/simple_gameplay/Flute Adventure.ogg" id="20_801cm"]
+[ext_resource type="Script" path="res://scripts/ui/components/question_frame.gd" id="30_frame"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s6je1"]
 atlas = ExtResource("4_vo60v")
@@ -226,61 +220,24 @@ animations = [{
 
 [node name="WordedFractionGameplay" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 28.0
-offset_top = 31.0
-offset_right = 28.0
-offset_bottom = 31.0
-scale = Vector2(0.95, 0.95)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_2emhg")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-self_modulate = Color(0.730216, 0.730216, 0.730216, 1)
-layout_mode = 0
-offset_left = -69.0
-offset_top = -46.0
-offset_right = 1093.0
-offset_bottom = 631.0
-color = Color(0.207843, 0.168627, 0.25098, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.180392, 0.203922, 0.25098, 1)
 
 [node name="EnergyBar" parent="." instance=ExtResource("2_iw1wy")]
 layout_mode = 1
-offset_left = 212.632
-offset_top = 11.5789
-offset_right = 212.632
-offset_bottom = 11.5789
-scale = Vector2(4, 4)
-
-[node name="question" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 66.0
-offset_top = 44.0
-offset_right = 748.0
-offset_bottom = 158.0
-
-[node name="NinePatchRect" type="NinePatchRect" parent="question"]
-layout_mode = 2
-texture = ExtResource("2_teu7h")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-
-[node name="MarginContainer" type="MarginContainer" parent="question"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label" type="Label" parent="question/MarginContainer"]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_fonts/font = ExtResource("3_tmrgo")
-text = "\"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\""
-horizontal_alignment = 1
-autowrap_mode = 2
 
 [node name="NPC_Sprites" type="AnimatedSprite2D" parent="."]
 position = Vector2(856, 120)
@@ -289,291 +246,13 @@ sprite_frames = SubResource("SpriteFrames_p2kin")
 animation = &"raket_wrong"
 autoplay = "masked_figure"
 
-[node name="TextureRect" type="TextureRect" parent="."]
-z_index = 1
+[node name="Frame" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_top = 2.0
-offset_right = 256.0
-offset_bottom = 146.0
-scale = Vector2(4, 4)
-texture = ExtResource("7_ys2jj")
-
-[node name="solution" type="HBoxContainer" parent="."]
-z_index = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 217.0
-offset_top = 238.0
-offset_right = 597.0
-offset_bottom = 310.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.5, 1.5)
-theme_override_constants/separation = 25
-
-[node name="first_fraction" type="MarginContainer" parent="solution"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="solution/first_fraction"]
-layout_mode = 2
-
-[node name="TextControl" type="Control" parent="solution/first_fraction/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("12_vmkse")
-
-[node name="Numerator" type="MarginContainer" parent="solution/first_fraction/VBoxContainer"]
-layout_mode = 2
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/first_fraction/VBoxContainer/Numerator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="NumeratorAnswer" type="LineEdit" parent="solution/first_fraction/VBoxContainer/Numerator"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "num"
-alignment = 1
-max_length = 2
-flat = true
-caret_blink = true
-
-[node name="Label" type="Label" parent="solution/first_fraction/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "-------"
-
-[node name="Denominator" type="MarginContainer" parent="solution/first_fraction/VBoxContainer"]
-layout_mode = 2
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/first_fraction/VBoxContainer/Denominator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="DenominatorAnswer" type="LineEdit" parent="solution/first_fraction/VBoxContainer/Denominator"]
-texture_filter = 1
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "denom"
-alignment = 1
-max_length = 2
-flat = true
-caret_blink = true
-
-[node name="opperand" type="MarginContainer" parent="solution"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="solution/opperand"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "+"
-
-[node name="second_fraction" type="MarginContainer" parent="solution"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="solution/second_fraction"]
-layout_mode = 2
-
-[node name="TextControl" type="Control" parent="solution/second_fraction/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("12_vmkse")
-
-[node name="Numerator" type="MarginContainer" parent="solution/second_fraction/VBoxContainer"]
-layout_mode = 2
-
-[node name="NumeratorAnswer" type="LineEdit" parent="solution/second_fraction/VBoxContainer/Numerator"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "num"
-alignment = 1
-max_length = 2
-flat = true
-caret_blink = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/second_fraction/VBoxContainer/Numerator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="Label" type="Label" parent="solution/second_fraction/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "-------"
-
-[node name="Denominator" type="MarginContainer" parent="solution/second_fraction/VBoxContainer"]
-layout_mode = 2
-
-[node name="DenominatorAnswer" type="LineEdit" parent="solution/second_fraction/VBoxContainer/Denominator"]
-texture_filter = 1
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "denom"
-alignment = 1
-max_length = 2
-flat = true
-caret_blink = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/second_fraction/VBoxContainer/Denominator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="equals" type="MarginContainer" parent="solution"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="solution/equals"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "="
-
-[node name="answer" type="MarginContainer" parent="solution"]
-texture_filter = 1
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="solution/answer"]
-layout_mode = 2
-
-[node name="TextControl" type="Control" parent="solution/answer/VBoxContainer"]
-layout_mode = 2
-script = ExtResource("12_vmkse")
-
-[node name="Numerator" type="MarginContainer" parent="solution/answer/VBoxContainer"]
-layout_mode = 2
-
-[node name="NumeratorAnswer" type="LineEdit" parent="solution/answer/VBoxContainer/Numerator"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "num"
-alignment = 1
-max_length = 3
-flat = true
-caret_blink = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/answer/VBoxContainer/Numerator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="Label" type="Label" parent="solution/answer/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "-------"
-
-[node name="Denominator" type="MarginContainer" parent="solution/answer/VBoxContainer"]
-layout_mode = 2
-
-[node name="DenominatorAnswer" type="LineEdit" parent="solution/answer/VBoxContainer/Denominator"]
-texture_filter = 1
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_tmrgo")
-placeholder_text = "denom"
-alignment = 1
-max_length = 3
-flat = true
-caret_blink = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="solution/answer/VBoxContainer/Denominator"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="submit" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 346.0
-offset_top = 458.0
-offset_right = 458.0
-offset_bottom = 492.0
-scale = Vector2(3, 3)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="submit"]
-layout_mode = 2
-texture = ExtResource("10_ewn1i")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="MarginContainer" type="MarginContainer" parent="submit"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="SubmitAnswer" type="Button" parent="."]
-layout_mode = 0
-offset_left = 357.0
-offset_top = 479.0
-offset_right = 669.0
-offset_bottom = 548.0
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "SUBMIT"
-flat = true
-
-[node name="DisplayAnswer" type="MarginContainer" parent="."]
-z_index = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 86.0
-offset_top = 374.0
-offset_right = 936.0
-offset_bottom = 414.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="UserAnswer" type="Label" parent="DisplayAnswer"]
-texture_filter = 1
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "Display if answer is right or wrong."
-horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 881.0
-offset_top = 495.0
-offset_right = 985.0
-offset_bottom = 535.0
-
-[node name="Button" type="Button" parent="MarginContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("9_2v7cv")
-text = "RETURN"
-flat = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer"]
-layout_mode = 2
-texture = ExtResource("8_s5m3f")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
+offset_left = 32.0
+offset_top = 72.0
+offset_right = 992.0
+offset_bottom = 552.0
+script = ExtResource("30_frame")
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -581,12 +260,11 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="HelpButtonWorded" parent="Control" instance=ExtResource("15_dwrph")]
-z_index = 1
 layout_mode = 0
-offset_left = 92.6316
-offset_top = 221.053
-offset_right = 166.632
-offset_bottom = 245.053
+offset_left = 32.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 56.0
 
 [node name="QuickTutorial" parent="Control" node_paths=PackedStringArray("next") instance=ExtResource("15_mwakl")]
 visible = false
@@ -797,14 +475,6 @@ autoplay = true
 
 [connection signal="correct" from="." to="." method="_on_correct_answer"]
 [connection signal="incorrect" from="." to="." method="_on_incorrect_answer"]
-[connection signal="text_changed" from="solution/first_fraction/VBoxContainer/Numerator/NumeratorAnswer" to="solution/first_fraction/VBoxContainer/TextControl" method="_on_numerator_answer_text_changed"]
-[connection signal="text_changed" from="solution/first_fraction/VBoxContainer/Denominator/DenominatorAnswer" to="solution/first_fraction/VBoxContainer/TextControl" method="_on_denominator_answer_text_changed"]
-[connection signal="text_changed" from="solution/second_fraction/VBoxContainer/Numerator/NumeratorAnswer" to="solution/second_fraction/VBoxContainer/TextControl" method="_on_numerator_answer_text_changed"]
-[connection signal="text_changed" from="solution/second_fraction/VBoxContainer/Denominator/DenominatorAnswer" to="solution/second_fraction/VBoxContainer/TextControl" method="_on_denominator_answer_text_changed"]
-[connection signal="text_changed" from="solution/answer/VBoxContainer/Numerator/NumeratorAnswer" to="solution/answer/VBoxContainer/TextControl" method="_on_numerator_answer_text_changed"]
-[connection signal="text_changed" from="solution/answer/VBoxContainer/Denominator/DenominatorAnswer" to="solution/answer/VBoxContainer/TextControl" method="_on_denominator_answer_text_changed"]
-[connection signal="button_down" from="SubmitAnswer" to="." method="_on_submit_answer_button_down"]
-[connection signal="button_down" from="MarginContainer/Button" to="." method="return_to_world"]
 
 [editable path="Control/QuickTutorial"]
 [editable path="Control/QuickTutorial2"]

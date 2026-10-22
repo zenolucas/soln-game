@@ -1,14 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://mmgnr4ih3lqk"]
+[gd_scene load_steps=2 format=3 uid="uid://mmgnr4ih3lqk"]
 
-[ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="1_ek65b"]
 [ext_resource type="Script" path="res://scripts/ui/help_button_worded.gd" id="2_r3bm5"]
 
 [node name="HelpButtonWorded" type="Button"]
-self_modulate = Color(0.462745, 0.764706, 0.47451, 1)
 offset_right = 8.0
 offset_bottom = 8.0
-theme_override_fonts/font = ExtResource("1_ek65b")
-text = "Help?"
+tooltip_text = "Show a tutorial for this problem"
+theme_type_variation = &"SmallButton"
+text = "? Help"
 script = ExtResource("2_r3bm5")
 
-[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="pressed" from="." to="." method="_on_button_down"]

@@ -31,6 +31,8 @@ var disable_chip_quest: bool
 var disable_rat_wizard_training_quest: bool
 
 signal saved_data_loaded
+## Emitted instead of saved_data_loaded when the save can't be read; message is for the student.
+signal saved_data_failed(message: String)
 var load_success: bool
 
 func _ready() -> void:
@@ -44,8 +46,9 @@ func load_save_data(student_id):
 	load_success = false
 	var url = Global.server_url("/game/getsavedata")
 	var http_request = HTTPRequest.new()
+	http_request.timeout = 15
 	add_child(http_request)
-	http_request.request_completed.connect(self._http_request_completed)
+	http_request.request_completed.connect(self._http_request_completed.bind(http_request))
 	
 	var post_data = {
 		"student_id": student_id
@@ -57,12 +60,17 @@ func load_save_data(student_id):
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
 	if error != OK:
-		print("error: unable to make request")
+		http_request.queue_free()
+		saved_data_failed.emit.call_deferred("That server address doesn't look right. Log in again.")
 
-func _http_request_completed(_result, response_code, _headers, body):
-	if response_code == 200:
+func _http_request_completed(result, response_code, _headers, body, http_request):
+	http_request.queue_free()
+	if RequestErrors.ok(result, response_code):
 		var json = JSON.new()
 		var error = json.parse(body.get_string_from_utf8())
+		if error != OK or not json.get_data() is Dictionary:
+			saved_data_failed.emit("Unexpected reply from the server.")
+			return
 		if error == OK:
 			var response = json.get_data()
 			player_badges = response.player_badges
@@ -99,8 +107,8 @@ func _http_request_completed(_result, response_code, _headers, body):
 			emit_signal("saved_data_loaded")
 			print("SAVE DATA LOADED!!")
 	else:
-		print("HTTP request failed with code: error in get save data", response_code)
 		load_success = false
+		saved_data_failed.emit(RequestErrors.describe(result, response_code, Global.host_ip))
 		
 		
 # ----------------------- SENDING SAVED DATA TO SERVER --------------------------------

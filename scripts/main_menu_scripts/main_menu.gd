@@ -9,16 +9,29 @@ extends Control
 ## PlayerState.first_time_initializing_second_floor_scene 
 ## PlayerState.first_time_initializing_third_floor_scene
 
+@onready var load_button: Button = $"buttons/load game"
+@onready var status_label: Label = $buttons/Status
+
 func _ready():
+	$"buttons/new game".grab_focus()
 	if Global.is_online:
-		$"ONLINE LABEL".visible = true
-		$"OFFLINE LABEL".visible = false
+		$Mode/Label.text = "ONLINE: " + PlayerState.player_username
+		# CONTINUE waits for the save, so it can't load a floor before the save arrives.
+		load_button.disabled = true
+		status_label.text = "Loading your save..."
+		SaveState.connect("saved_data_loaded", func():
+			load_button.disabled = false
+			status_label.text = "")
 		SaveState.connect("saved_data_loaded", _on_saved_data_loaded)
+		SaveState.saved_data_failed.connect(func(message):
+			load_button.disabled = false
+			status_label.text = "Couldn't load your save."
+			NoticeOverlay.ask(self, "Couldn't load your save", message, ["TRY AGAIN", "CLOSE"], func(choice):
+				if choice == 0:
+					_on_load_game_pressed()))
 		SaveState.load_save_data(PlayerState.student_id)
-	elif !Global.is_online:
-		$"OFFLINE LABEL".visible = false
-		$"OFFLINE LABEL".visible = true
-	print("Current IP address: ", Global.host_ip)
+	else:
+		$Mode/Label.text = "OFFLINE MODE"
 
 func _on_saved_data_loaded():
 	#read the db and check if it has all the parameters for loading player state
@@ -98,6 +111,11 @@ func _on_quit_pressed() -> void:
 	get_tree().quit(0)
 
 func _on_load_game_pressed() -> void:
+	if Global.is_online and not SaveState.load_success:
+		load_button.disabled = true
+		status_label.text = "Loading your save..."
+		SaveState.load_save_data(PlayerState.student_id)
+		return
 	print("Loading game based on saved variables, current floor: ", Global.current_floor)
 	match Global.current_floor:
 		1:

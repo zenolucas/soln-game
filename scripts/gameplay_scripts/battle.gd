@@ -1,12 +1,15 @@
 extends Control
-@onready var attack_button = $Actions/Attack
+@onready var attack_button = $Attack/Attack
 @onready var enemy_hp = $"Enemy HP"
 @onready var question = $Question
-@onready var actions = $Actions
 @onready var question_bg = $"Question BG"
 @onready var snekker_sprite = $"Enemy Sprite"
 
 func _ready() -> void:
+	attack_button.grab_focus()
+	question.visibility_changed.connect(func():
+		if not question.visible:
+			attack_button.grab_focus.call_deferred())
 	Global.Snekker_HP = 100
 
 func _process(delta: float) -> void:
@@ -33,7 +36,6 @@ func _process(delta: float) -> void:
 		snekker_sprite.play("damaged_life_3")
 	elif Global.Snekker_HP <= 50:
 		snekker_sprite.play("damaged_life_2")
-		enemy_hp.add_theme_color_override("font_color", "#933f45")
 	elif Global.Snekker_HP <= 80:
 		snekker_sprite.play("damaged_life_1")
 

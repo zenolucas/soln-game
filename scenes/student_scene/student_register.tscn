@@ -1,11 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://f7you6f3klj0"]
+[gd_scene load_steps=9 format=3 uid="uid://f7you6f3klj0"]
 
-[ext_resource type="Script" path="res://scripts/login_script/student_register.gd" id="1_3k471"]
-[ext_resource type="Script" path="res://scripts/login_script/soln_bg_animation.gd" id="1_lpcqc"]
+[ext_resource type="Script" path="res://scripts/login_script/student_register.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://c6dgj1k2tddmy" path="res://assets/background/Lighthouse_movement.png" id="2_xd708"]
-[ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="3_hu7dh"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="4_1bv1d"]
-[ext_resource type="PackedScene" uid="uid://bcui7ofr241ek" path="res://scenes/student_scene/hide_password.tscn" id="5_w83xd"]
+[ext_resource type="PackedScene" uid="uid://bcui7ofr241ek" path="res://scenes/student_scene/hide_password.tscn" id="5_hide"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5ciok"]
 atlas = ExtResource("2_xd708")
@@ -43,177 +40,215 @@ animations = [{
 "speed": 2.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h4jqm"]
-
 [node name="StudentRegister" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_3k471")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Background" type="AnimatedSprite2D" parent="."]
+position = Vector2(512, 288)
+scale = Vector2(2.00804, 2.05082)
+sprite_frames = SubResource("SpriteFrames_4mjwi")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Dim" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(6.46513, 4.57422)
-metadata/_edit_use_anchors_ = true
+color = Color(0.180392, 0.203922, 0.25098, 0.6)
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="Panel"]
-texture_filter = 1
-scale = Vector2(1.00145, 1.00297)
-script = ExtResource("1_lpcqc")
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Soln_background" type="AnimatedSprite2D" parent="Panel/CharacterBody2D"]
-position = Vector2(78.6161, 61.6853)
-scale = Vector2(0.310115, 0.446798)
-sprite_frames = SubResource("SpriteFrames_4mjwi")
-animation = &"idle"
+[node name="Card" type="PanelContainer" parent="Center"]
+layout_mode = 2
+theme_type_variation = &"Card"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Panel/CharacterBody2D"]
-visible = false
-position = Vector2(75.0395, 166.771)
-shape = SubResource("RectangleShape2D_h4jqm")
+[node name="Form" type="VBoxContainer" parent="Center/Card"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(509, 283)
+[node name="Title" type="Label" parent="Center/Card/Form"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Create your account"
 
-[node name="StudentInformation" type="NinePatchRect" parent="."]
-layout_mode = 0
-offset_left = 153.0
-offset_top = 111.0
-offset_right = 1217.0
-offset_bottom = 686.999
+[node name="Hint" type="Label" parent="Center/Card/Form"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Use the class number and section your teacher gave you."
+autowrap_mode = 3
 
-[node name="IPAddress" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 627.0
-offset_top = 80.0
-offset_right = 865.0
-offset_bottom = 111.0
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "Server (IP or https:// URL)"
+[node name="IPAddressField" type="VBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/IPAddressField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Server"
+
+[node name="IPAddress" type="LineEdit" parent="Center/Card/Form/IPAddressField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "IP or https:// address"
 caret_blink = true
 
-[node name="FirstName" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 344.0
-offset_top = 130.0
-offset_right = 582.0
-offset_bottom = 161.0
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "First Name"
+[node name="Grid" type="GridContainer" parent="Center/Card/Form"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="FirstNameField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/FirstNameField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "First name"
+
+[node name="FirstName" type="LineEdit" parent="Center/Card/Form/Grid/FirstNameField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "First name"
 caret_blink = true
 
-[node name="LastName" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 347.0
-offset_top = 186.0
-offset_right = 584.0
-offset_bottom = 217.0
-theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "Last Name"
+[node name="LastNameField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/LastNameField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Last name"
+
+[node name="LastName" type="LineEdit" parent="Center/Card/Form/Grid/LastNameField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Last name"
 caret_blink = true
 
-[node name="Username" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 348.0
-offset_top = 245.0
-offset_right = 585.0
-offset_bottom = 276.0
-theme_override_fonts/font = ExtResource("3_hu7dh")
+[node name="UsernameField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/UsernameField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Username"
+
+[node name="Username" type="LineEdit" parent="Center/Card/Form/Grid/UsernameField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
 placeholder_text = "Username"
 caret_blink = true
 
-[node name="ClassNumber" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 623.0
-offset_top = 126.0
-offset_right = 861.0
-offset_bottom = 157.0
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "Class Number"
-caret_blink = true
+[node name="PasswordField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
-[node name="ClassSection" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 622.0
-offset_top = 184.0
-offset_right = 862.0
-offset_bottom = 215.0
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("3_hu7dh")
-placeholder_text = "Class Section"
-caret_blink = true
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/PasswordField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Password"
 
-[node name="Password" type="LineEdit" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 622.0
-offset_top = 245.0
-offset_right = 860.0
-offset_bottom = 276.0
-scale = Vector2(0.99258, 0.982386)
-theme_override_fonts/font = ExtResource("3_hu7dh")
+[node name="PasswordRow" type="HBoxContainer" parent="Center/Card/Form/Grid/PasswordField"]
+layout_mode = 2
+
+[node name="Password" type="LineEdit" parent="Center/Card/Form/Grid/PasswordField/PasswordRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "Password"
 caret_blink = true
 secret = true
 
-[node name="HidePassword" parent="StudentInformation/Password" instance=ExtResource("5_w83xd")]
-layout_mode = 0
-offset_left = 192.428
-offset_top = 2.03586
-offset_right = 236.428
-offset_bottom = 26.0359
+[node name="HidePassword" parent="Center/Card/Form/Grid/PasswordField/PasswordRow" instance=ExtResource("5_hide")]
+layout_mode = 2
 
-[node name="StudentRegister" type="RichTextLabel" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 345.0
-offset_top = 86.0
-offset_right = 587.0
-offset_bottom = 126.0
-theme_override_fonts/normal_font = ExtResource("4_1bv1d")
-text = "Student Register"
+[node name="ClassNumberField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
-[node name="RegisterButton" type="Button" parent="StudentInformation"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 526.0
-offset_top = 295.0
-offset_right = 691.0
-offset_bottom = 352.0
-theme_override_fonts/font = ExtResource("4_1bv1d")
-text = "Register"
-flat = true
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/ClassNumberField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Class number"
 
-[node name="ErrorLabelUsername" type="RichTextLabel" parent="."]
-self_modulate = Color(0.576471, 0.247059, 0.270588, 1)
-layout_mode = 0
-offset_left = 511.0
-offset_top = 396.0
-offset_right = 733.0
-offset_bottom = 422.0
-theme_override_fonts/normal_font = ExtResource("3_hu7dh")
-scroll_active = false
+[node name="ClassNumber" type="LineEdit" parent="Center/Card/Form/Grid/ClassNumberField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Class number"
+caret_blink = true
 
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 40.0
-offset_right = 111.0
-offset_bottom = 64.0
+[node name="ClassSectionField" type="VBoxContainer" parent="Center/Card/Form/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Center/Card/Form/Grid/ClassSectionField"]
+layout_mode = 2
+theme_type_variation = &"Feedback"
+text = "Section"
+
+[node name="ClassSection" type="LineEdit" parent="Center/Card/Form/Grid/ClassSectionField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+placeholder_text = "Section"
+caret_blink = true
+
+[node name="ErrorLabel" type="Label" parent="Center/Card/Form"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"FeedbackError"
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Card/Form"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Center/Card/Form/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
 text = "BACK"
 
-[connection signal="button_down" from="StudentInformation/RegisterButton" to="." method="_on_register_button_button_down"]
-[connection signal="button_down" from="BackButton" to="." method="_on_back_button_button_down"]
+[node name="RegisterButton" type="Button" parent="Center/Card/Form/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+text = "REGISTER"
+
+[connection signal="pressed" from="Center/Card/Form/Buttons/RegisterButton" to="." method="_on_register_button_button_down"]
+[connection signal="pressed" from="Center/Card/Form/Buttons/BackButton" to="." method="_on_back_button_button_down"]

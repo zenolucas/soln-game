@@ -1,10 +1,20 @@
 extends Control
+## The multiple-choice panel shared by the Snekkers, Crab and Final Boss quizzes.
+## Laid out like the teacher portal's quiz preview: the speaker's portrait, a speech
+## box with the question, then a 2x2 grid of lettered choices.
 
-@onready var content = $container/VBoxContainer/Content
-@onready var c1:Button = $"container/VBoxContainer/Answers/a/Choice 1"
-@onready var c2:Button = $"container/VBoxContainer/Answers/b/Choice 2"
-@onready var c3:Button = $"container/VBoxContainer/Answers/c/Choice 3"
-@onready var c4:Button = $"container/VBoxContainer/Answers/d/Choice 4"
+const LETTERS := "ABCD"
+const FEEDBACK_SECONDS := 0.8
+const LONG_TEXT := 90
+const LONG_CHOICE := 16
+
+## The enemy's picture, shown beside the question.
+@export var portrait: Texture2D
+
+@onready var content: Label = %Content
+@onready var portrait_rect: TextureRect = %Portrait
+@onready var feedback: Label = %Feedback
+@onready var choice_buttons: Array[Button] = [%Choice1, %Choice2, %Choice3, %Choice4]
 @onready var mc_questions
 @onready var mc_choice_ids
 @onready var camera = $"../Camera2D"
@@ -18,11 +28,26 @@ var rng = RandomNumberGenerator.new()
 var question
 # Number of questions this fight started with (set on the first answer, before any is removed).
 var question_count := 0
+# The current question's choices as written, without their "A. " labels.
+var choices: Array[String] = []
+var _locked := false
+
+static func choice_label(choice_index: int, text: String) -> String:
+	return "%s. %s" % [LETTERS[choice_index], text]
+
+static func is_correct(chosen, correct) -> bool:
+	return str(chosen) == str(correct)
 
 func _ready():
+	portrait_rect.texture = portrait
+	portrait_rect.visible = portrait != null
+	for i in choice_buttons.size():
+		choice_buttons[i].pressed.connect(_on_choice_pressed.bind(i))
+	visibility_changed.connect(_on_visibility_changed)
 	if Global.is_online:
 		print("ONLINE MODE: CURRENT QUEST IS: ", DialogueState.current_quest)
 		QuestionsLoader.connect("questions_loaded", _on_questions_loaded)
+		QuestionsLoader.questions_failed.connect(_on_questions_failed)
 		if DialogueState.current_quest == "face_the_snake_post_cutscene":
 			QuestionsLoader.get_snekkers_questions()
 		elif DialogueState.current_quest == "crab_boss":
@@ -94,6 +119,16 @@ func _ready():
 			["What is 3/4 - 1/2?", "1/4", "1/2", "1/3", "2/4", "1/4"]
 			]
 			
+## Online only: the questions didn't arrive. Let the student retry or leave.
+func _on_questions_failed(failed_minigame_id: int, message: String) -> void:
+	if failed_minigame_id != QuestionsLoader.minigame_id:
+		return
+	NoticeOverlay.ask(get_tree().current_scene, "Couldn't load the questions", message, ["TRY AGAIN", "BACK TO MAP"], func(choice):
+		if choice == 0:
+			QuestionsLoader.reload(failed_minigame_id)
+		else:
+			get_tree().change_scene_to_file(Global.floor_scene()))
+
 func _on_questions_loaded():
 	if DialogueState.current_quest == "face_the_snake_post_cutscene":
 		mc_questions = QuestionsLoader.snekkers_questions
@@ -106,43 +141,54 @@ func _on_questions_loaded():
 		mc_choice_ids = QuestionsLoader.final_boss_choice_ids
 	# score = questions.size() MINUS no_of_wrong_attempts
 	Global.total_score = mc_questions.size()
+	if is_visible_in_tree():
+		_show_new_question()
 
 # can change for better randomness using shuffle bags
 func _choose_question() -> int:
-	print(mc_questions)
 	return RandomNumberGenerator.new().randi_range(0, mc_questions.size() - 1)
 
-func _on_choice_1_pressed() -> void:
-	# post statistic if online
-	postStatistics(0)
-	answer = c1.text
-	_check_answer()
-	
+func _on_visibility_changed() -> void:
+	if is_visible_in_tree():
+		_show_new_question()
 
-func _on_choice_2_pressed() -> void:
+func _input(event: InputEvent) -> void:
+	if _locked or not is_visible_in_tree() or not event is InputEventKey:
+		return
+	if not event.pressed or event.echo:
+		return
+	var choice_index := [KEY_1, KEY_2, KEY_3, KEY_4].find(event.keycode)
+	if choice_index == -1:
+		choice_index = [KEY_KP_1, KEY_KP_2, KEY_KP_3, KEY_KP_4].find(event.keycode)
+	if choice_index != -1 and not choice_buttons[choice_index].disabled:
+		get_viewport().set_input_as_handled()
+		_on_choice_pressed(choice_index)
+
+## Shows the student which choice they picked, green or red, then carries on as before.
+## The correct choice is never revealed: a missed question stays in the pool.
+func _on_choice_pressed(choice_index: int) -> void:
+	if _locked or choices.size() <= choice_index:
+		return
+	_locked = true
 	# post statistic if online
-	postStatistics(1)
-	answer = c2.text
+	postStatistics(choice_index)
+	answer = choices[choice_index]
+	var right := is_correct(answer, correct_answer)
+	choice_buttons[choice_index].theme_type_variation = &"ChoiceCorrect" if right else &"ChoiceWrong"
+	if right:
+		correct_sfx.play()
+		_set_feedback("Correct!", &"FeedbackSuccess")
+	else:
+		wrong_sfx.play()
+		_set_feedback("Not quite. Try another question.", &"FeedbackError")
+	await get_tree().create_timer(FEEDBACK_SECONDS).timeout
 	_check_answer()
-	
-func _on_choice_3_pressed() -> void:
-	# post statistic if online
-	postStatistics(2)
-	answer = c3.text
-	_check_answer()
-	
-func _on_choice_4_pressed() -> void:
-	# post statistic if online
-	postStatistics(3)
-	answer = c4.text
-	_check_answer()
-	
+
 func _check_answer():
 	if question_count == 0:
 		question_count = mc_questions.size()
 	#On correct answer
-	if answer == correct_answer:
-		correct_sfx.play()
+	if is_correct(answer, correct_answer):
 		camera.apply_shake()
 		visible=false
 		
@@ -157,8 +203,6 @@ func _check_answer():
 		Global.guardian_enemy_hp = hp
 	#On wrong answer
 	else:
-		print("Incorrect answer")
-		wrong_sfx.play()
 		if Global.is_online:
 			Global.total_score -= 1
 
@@ -166,7 +210,16 @@ func _check_answer():
 	Global.Giant_Enemy_Crab_question = false
 	Global.guardian_enemy_question = false
 
-func _on_draw() -> void:
+func _show_new_question() -> void:
+	_locked = false
+	_set_feedback("Press 1-4 or click an answer.", &"Feedback")
+	if mc_questions == null:
+		# Online questions haven't arrived yet; _on_questions_loaded fills this in.
+		content.text = "Loading questions..."
+		for button in choice_buttons:
+			button.text = ""
+			button.disabled = true
+		return
 	if mc_questions.is_empty():
 		# A quiz with no questions can't be fought: end it rather than index an empty pool.
 		Global.Snekker_HP = 0
@@ -175,17 +228,27 @@ func _on_draw() -> void:
 		visible = false
 		return
 	index = _choose_question()
-	print("Questions: ")
-	print(mc_questions)
-	print("Choice IDs")
-	print(mc_choice_ids)
 	question = mc_questions[index]
 	content.text = question[0]
-	c1.text = question[1]
-	c2.text = question[2]
-	c3.text = question[3]
-	c4.text = question[4]
+	content.add_theme_font_size_override("font_size", 24 if content.text.length() <= LONG_TEXT else 16)
+	choices.clear()
+	for i in choice_buttons.size():
+		choices.append(str(question[i + 1]))
+	var longest := 0
+	for choice in choices:
+		longest = max(longest, choice.length())
+	for i in choice_buttons.size():
+		var button := choice_buttons[i]
+		button.text = choice_label(i, choices[i])
+		button.disabled = false
+		button.theme_type_variation = &"ChoiceButton"
+		button.add_theme_font_size_override("font_size", 24 if longest <= LONG_CHOICE else 16)
 	correct_answer = question[5]
+	choice_buttons[0].grab_focus.call_deferred()
+
+func _set_feedback(text: String, variation: StringName) -> void:
+	feedback.text = text
+	feedback.theme_type_variation = variation
 	
 func postStatistics(choice_index):
 	if Global.is_online:

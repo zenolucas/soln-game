@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dr8565r7bni6"]
+[gd_scene load_steps=9 format=3 uid="uid://dr8565r7bni6"]
 
 [ext_resource type="Script" path="res://scripts/main_menu_scripts/main_menu.gd" id="1_vheuk"]
 [ext_resource type="Texture2D" uid="uid://c6dgj1k2tddmy" path="res://assets/background/Lighthouse_movement.png" id="2_141v2"]
-[ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_r403t"]
 [ext_resource type="AudioStream" uid="uid://cj5a1s616aiit" path="res://audio/background_music/floor_1/Nature Investigation Snekker-bg.ogg" id="4_fibsu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5ciok"]
@@ -43,79 +42,71 @@ animations = [{
 
 [node name="main_menu" type="Control"]
 layout_mode = 3
-anchor_right = 1.125
-anchor_bottom = 1.123
-offset_left = -16.0
-offset_top = -1.0
-offset_right = -16.0
-offset_bottom = -0.848022
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vheuk")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(529, 288.64)
-scale = Vector2(2.00823, 2.04726)
+position = Vector2(512, 288)
 
 [node name="Soln_background" type="AnimatedSprite2D" parent="."]
-position = Vector2(529.049, 289)
 scale = Vector2(2.00804, 2.04982)
 sprite_frames = SubResource("SpriteFrames_jaifq")
 animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.164573
+position = Vector2(512, 288)
 
 [node name="buttons" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 759.0
-offset_top = 243.0
-offset_right = 961.0
-offset_bottom = 385.0
-theme_override_constants/separation = 20
+offset_left = 704.0
+offset_top = 232.0
+offset_right = 960.0
+offset_bottom = 432.0
+theme_override_constants/separation = 12
 
 [node name="new game" type="Button" parent="buttons"]
+custom_minimum_size = Vector2(256, 48)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_r403t")
-theme_override_font_sizes/font_size = 25
+theme_type_variation = &"PrimaryButton"
 text = "NEW GAME"
-flat = true
 
 [node name="load game" type="Button" parent="buttons"]
+custom_minimum_size = Vector2(256, 48)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_r403t")
-theme_override_font_sizes/font_size = 25
-text = "LOAD GAME"
-flat = true
+text = "CONTINUE"
 
 [node name="quit" type="Button" parent="buttons"]
+custom_minimum_size = Vector2(256, 48)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_r403t")
-theme_override_font_sizes/font_size = 25
-text = "QUIT
-"
-flat = true
+text = "QUIT"
+
+[node name="Status" type="Label" parent="buttons"]
+layout_mode = 2
+theme_type_variation = &"HUDLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="MenuBGM" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fibsu")
 volume_db = -21.55
 autoplay = true
 
-[node name="ONLINE LABEL" type="Label" parent="."]
-visible = false
+[node name="Mode" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_left = 43.0
-offset_top = 28.0
-offset_right = 137.0
-offset_bottom = 44.0
-text = "ONLINE MODE"
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 56.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_type_variation = &"HUDPanel"
 
-[node name="OFFLINE LABEL" type="Label" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 43.0
-offset_top = 28.0
-offset_right = 142.0
-offset_bottom = 44.0
+[node name="Label" type="Label" parent="Mode"]
+layout_mode = 2
+theme_type_variation = &"HUDLabel"
 text = "OFFLINE MODE"
 
 [connection signal="pressed" from="buttons/new game" to="." method="_on_new_game_pressed"]

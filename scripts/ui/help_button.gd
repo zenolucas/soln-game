@@ -1,10 +1,6 @@
 extends Control
 
-# numerator and denominator of first and second fraction
-@onready var num1_text = $"../../FractionProblem/VBoxContainer/Problem/Fraction1/VBoxContainer/Numerator"
-@onready var denum1_text = $"../../FractionProblem/VBoxContainer/Problem/Fraction1/VBoxContainer/Denominator"
-@onready var num2_text = $"../../FractionProblem/VBoxContainer/Problem/Fraction2/VBoxContainer/Numerator"
-@onready var denum2_text = $"../../FractionProblem/VBoxContainer/Problem/Fraction2/VBoxContainer/Denominator"
+@onready var fraction_problem = $"../../FractionProblem"
 
 
 # Tutorials scenes
@@ -21,10 +17,10 @@ extends Control
 
 # Tutorial for same and different denominators
 func _on_button_down():
-		var num1 = num1_text.text
-		var denum1 = denum1_text.text
-		var num2 = num2_text.text
-		var denum2 = denum2_text.text
+		var num1 = fraction_problem.num1.text
+		var denum1 = fraction_problem.denum1.text
+		var num2 = fraction_problem.num2.text
+		var denum2 = fraction_problem.denum2.text
 		
 		# Answer can be simplified
 		if Global.is_simplified_tutorial:

@@ -1,71 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://73jm5qjy52vq"]
+[gd_scene load_steps=8 format=3 uid="uid://73jm5qjy52vq"]
 
 [ext_resource type="Script" path="res://dialogue/dialogue_balloon/balloon.gd" id="1_36de5"]
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/dialogue_label.tscn" id="2_a8ve6"]
-[ext_resource type="Texture2D" uid="uid://bfl2h2w5xaxe" path="res://dialogue/dialogue box.png" id="2_ce08o"]
 [ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_reponses_menu.gd" id="3_72ixx"]
 [ext_resource type="Texture2D" uid="uid://82f2xr1nobr6" path="res://dialogue/Next Dialogue Indicator.png" id="5_pe3ru"]
-[ext_resource type="Theme" uid="uid://dytyv4wft7gjb" path="res://dialogue/dialogue_theme.tres" id="6_ut6d7"]
 [ext_resource type="AudioStream" uid="uid://dgvieh0twi3t5" path="res://audio/sound_effects/Bubble Blip.wav" id="7_vu4ma"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spyqn"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.329412, 0.329412, 0.329412, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ri4m3"]
-bg_color = Color(0.121569, 0.121569, 0.121569, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e0njw"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.6, 0.6, 0.6, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uy0d5"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="Theme" id="Theme_qq3yp"]
-default_font_size = 20
-Button/styles/disabled = SubResource("StyleBoxFlat_spyqn")
-Button/styles/focus = SubResource("StyleBoxFlat_ri4m3")
-Button/styles/hover = SubResource("StyleBoxFlat_e0njw")
-Button/styles/normal = SubResource("StyleBoxFlat_e0njw")
-MarginContainer/constants/margin_bottom = 15
-MarginContainer/constants/margin_left = 30
-MarginContainer/constants/margin_right = 30
-MarginContainer/constants/margin_top = 15
-Panel/styles/panel = SubResource("StyleBoxFlat_uy0d5")
 
 [sub_resource type="Animation" id="Animation_82s65"]
 length = 0.001
@@ -77,7 +16,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(918, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(952, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/1/type = "bezier"
@@ -88,7 +27,7 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(136, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(508, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 
@@ -104,7 +43,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(918, -0.25, 0, 0.25, 0, 918, -0.25, 0, 0.25, 0, 918, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(952, -0.25, 0, 0.25, 0, 952, -0.25, 0, 0.25, 0, 952, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 0.5, 1)
 }
 tracks/1/type = "bezier"
@@ -115,20 +54,8 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(136, -0.25, 0, 0.25, 0, 128, -0.25, 0, 0.25, 0, 136, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(508, -0.25, 0, 0.25, 0, 500, -0.25, 0, 0.25, 0, 508, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 0.5, 1)
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Label:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 0,
-"values": []
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ri7k3"]
@@ -149,93 +76,78 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_qq3yp")
 
-[node name="TextureRect" type="TextureRect" parent="Balloon"]
+[node name="Portrait" type="TextureRect" parent="Balloon"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 583.0
+offset_top = 26.0
+offset_right = 979.0
+offset_bottom = 422.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Box" type="PanelContainer" parent="Balloon"]
 layout_mode = 0
 offset_left = 24.0
-offset_top = 352.0
-offset_right = 1015.0
+offset_top = 368.0
+offset_right = 1000.0
 offset_bottom = 552.0
-texture = ExtResource("2_ce08o")
-expand_mode = 1
+mouse_filter = 2
+theme_type_variation = &"SpeechBox"
 
-[node name="DialogueLabel" parent="Balloon/TextureRect" instance=ExtResource("2_a8ve6")]
-unique_name_in_owner = true
+[node name="VBox" type="VBoxContainer" parent="Balloon/Box"]
 layout_mode = 2
-anchors_preset = 0
-anchor_right = 0.0
-offset_left = 56.0
-offset_top = 94.0
-offset_right = 848.0
-offset_bottom = 150.0
-size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.207843, 0.168627, 0.25098, 1)
-text = "Dialogue..."
-seconds_per_step = 0.04
+mouse_filter = 2
+theme_override_constants/separation = 8
 
-[node name="Dialogue" type="MarginContainer" parent="Balloon/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 29.0
-offset_top = 31.0
-offset_right = -701.0
-offset_bottom = -83.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Balloon/TextureRect/Dialogue"]
-layout_mode = 2
-
-[node name="CharacterLabel" type="RichTextLabel" parent="Balloon/TextureRect/Dialogue/VBoxContainer"]
+[node name="CharacterLabel" type="RichTextLabel" parent="Balloon/Box/VBox"]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.501961)
 layout_mode = 2
 mouse_filter = 1
-theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_type_variation = &"SpeakerName"
 bbcode_enabled = true
 text = "Character"
 fit_content = true
 scroll_active = false
 
-[node name="NextDialogueIndicator" type="TextureRect" parent="Balloon/TextureRect"]
+[node name="DialogueLabel" parent="Balloon/Box/VBox" instance=ExtResource("2_a8ve6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Dialogue..."
+seconds_per_step = 0.04
+
+[node name="Hint" type="Label" parent="Balloon"]
+unique_name_in_owner = true
 layout_mode = 0
-offset_left = 918.0
-offset_top = 136.0
-offset_right = 965.0
-offset_bottom = 183.0
+offset_left = 560.0
+offset_top = 516.0
+offset_right = 944.0
+offset_bottom = 540.0
+theme_type_variation = &"Feedback"
+text = "Click or press Space"
+horizontal_alignment = 2
+
+[node name="NextDialogueIndicator" type="TextureRect" parent="Balloon"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 952.0
+offset_top = 508.0
+offset_right = 984.0
+offset_bottom = 540.0
+mouse_filter = 2
 texture = ExtResource("5_pe3ru")
 expand_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Balloon/TextureRect/NextDialogueIndicator"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Balloon/NextDialogueIndicator"]
 libraries = {
 "": SubResource("AnimationLibrary_ri7k3")
 }
 autoplay = "bobbing_default"
-
-[node name="Label" type="Label" parent="Balloon/TextureRect/NextDialogueIndicator"]
-layout_mode = 0
-offset_left = -89.0
-offset_top = 16.0
-offset_right = 381.0
-offset_bottom = 117.0
-scale = Vector2(0.2, 0.2)
-theme_override_colors/font_color = Color(0.207843, 0.168627, 0.25098, 1)
-theme_override_font_sizes/font_size = 79
-text = "Left Click"
-
-[node name="Portrait" type="TextureRect" parent="Balloon"]
-unique_name_in_owner = true
-z_index = -1
-texture_filter = 1
-custom_minimum_size = Vector2(128, 128)
-layout_mode = 2
-offset_left = 583.0
-offset_top = 26.0
-offset_right = 979.0
-offset_bottom = 422.0
 
 [node name="Responses" type="MarginContainer" parent="Balloon"]
 layout_mode = 1
@@ -244,10 +156,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -480.0
-offset_top = -509.0
-offset_right = 154.0
-offset_bottom = -189.0
+offset_left = -488.0
+offset_top = -512.0
+offset_right = 160.0
+offset_bottom = -224.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -255,18 +167,17 @@ grow_vertical = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
-theme_override_constants/separation = 2
+theme_override_constants/separation = 8
 script = ExtResource("3_72ixx")
 response_template = NodePath("ResponseExample")
 
 [node name="ResponseExample" type="Button" parent="Balloon/Responses/ResponsesMenu"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme = ExtResource("6_ut6d7")
-theme_override_colors/icon_focus_color = Color(0.576471, 0.247059, 0.270588, 1)
-theme_override_colors/icon_hover_color = Color(0.576471, 0.247059, 0.270588, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.576471, 0.247059, 0.270588, 1)
-theme_override_font_sizes/font_size = 18
+theme_type_variation = &"ChoiceButton"
+theme_override_font_sizes/font_size = 16
 text = "You don't happen to be a morning person right?"
+alignment = 0
 text_overrun_behavior = 3
 
 [node name="TalkingSounds" type="AudioStreamPlayer" parent="."]
@@ -275,5 +186,5 @@ volume_db = -24.762
 pitch_scale = 1.33
 
 [connection signal="gui_input" from="Balloon" to="." method="_on_balloon_gui_input"]
-[connection signal="spoke" from="Balloon/TextureRect/DialogueLabel" to="." method="_on_dialogue_label_spoke"]
+[connection signal="spoke" from="Balloon/Box/VBox/DialogueLabel" to="." method="_on_dialogue_label_spoke"]
 [connection signal="response_selected" from="Balloon/Responses/ResponsesMenu" to="." method="_on_responses_menu_response_selected"]

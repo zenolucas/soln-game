@@ -27,6 +27,7 @@ var guardian_enemy_hp = 100
 var guardian_enemy_current_hp = 100
 var guardian_enemy_question = false
 
+const MAX_ENERGY := 5
 var user_energy = 3
 
 # tutorial
@@ -70,6 +71,16 @@ func server_base_url(address: String) -> String:
 		base += ":3000"
 	return "http://" + base
 
+## The scene of the floor the student is on, for "back to the map" buttons.
+func floor_scene() -> String:
+	match current_floor:
+		2:
+			return "res://scenes/levels/Floor2.tscn"
+		3:
+			return "res://scenes/levels/Floor3.tscn"
+		_:
+			return "res://scenes/levels/Floor1.tscn"
+
 func server_url(path: String) -> String:
 	return server_base_url(host_ip) + path
 
@@ -85,6 +96,6 @@ func quiz_boss_hp(remaining: int, total: int) -> int:
 	return roundi(100.0 * remaining / total)
 
 func add_energy():
-	if user_energy >= 5:
+	if user_energy >= MAX_ENERGY:
 		return
 	user_energy += 1

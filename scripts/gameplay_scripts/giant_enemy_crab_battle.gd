@@ -1,11 +1,14 @@
 extends Control
-@onready var attack_button = $Actions/Attack
+@onready var attack_button = $Attack/Attack
 @onready var enemy_hp = $"Enemy HP"
 @onready var question = $Question
-@onready var actions = $Actions
 @onready var question_bg = $"Question BG"
 
 func _ready() -> void:
+	attack_button.grab_focus()
+	question.visibility_changed.connect(func():
+		if not question.visible:
+			attack_button.grab_focus.call_deferred())
 	Global.Giant_Enemy_Crab_HP = 100
 
 func _process(delta: float) -> void:
@@ -17,8 +20,6 @@ func _process(delta: float) -> void:
 		question.hide()
 		question_bg.hide()
 	
-	if Global.Giant_Enemy_Crab_HP <= 50:
-		enemy_hp.add_theme_color_override("font_color", "#933f45")
 	
 	
 	if Global.Giant_Enemy_Crab_HP == 0:

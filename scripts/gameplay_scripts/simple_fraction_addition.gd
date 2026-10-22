@@ -17,6 +17,24 @@ func _ready() -> void:
 			animation_player = $Robot
 			fraction_problem.quest_number = 2
 	animation_player.visible = true
+	fraction_problem.frame.place_npc(animation_player)
+	_point_tutorials()
+
+# Fit each tutorial's spotlight to the part of the problem it explains.
+func _point_tutorials() -> void:
+	var targets := {
+		"QuickTutorial": fraction_problem.operands,
+		"QuickTutorial2": fraction_problem.answer_fraction,
+		"QuickTutorial3": fraction_problem.operands,
+		"QuickTutorial4": fraction_problem.operands,
+		"QuickTutorial5": fraction_problem.fraction1,
+		"QuickTutorial6": fraction_problem.fraction1,
+		"QuickTutorial7": fraction_problem.fraction2,
+		"QuickTutorial8": fraction_problem.fraction2,
+		"QuickTutorial9": fraction_problem.answer_fraction,
+	}
+	for tutorial_name in targets:
+		$Tutorials.get_node(tutorial_name).target = targets[tutorial_name]
 
 func _on_fraction_problem_all_done() -> void:
 	if current_quest == "saisai_wheelbarrow":

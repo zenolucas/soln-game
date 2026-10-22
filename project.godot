@@ -50,7 +50,7 @@ enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg", "res://add
 
 [gui]
 
-theme/custom_font="res://dialogue/terminal-grotesque.ttf"
+theme/custom="res://assets/ui/theme/soln_theme.tres"
 
 [input]
 
