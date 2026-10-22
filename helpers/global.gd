@@ -71,6 +71,16 @@ func server_base_url(address: String) -> String:
 		base += ":3000"
 	return "http://" + base
 
+## The scene of the floor the student is on, for "back to the map" buttons.
+func floor_scene() -> String:
+	match current_floor:
+		2:
+			return "res://scenes/levels/Floor2.tscn"
+		3:
+			return "res://scenes/levels/Floor3.tscn"
+		_:
+			return "res://scenes/levels/Floor1.tscn"
+
 func server_url(path: String) -> String:
 	return server_base_url(host_ip) + path
 

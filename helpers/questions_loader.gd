@@ -20,6 +20,8 @@ var post_data = {}
 var minigame_id
 
 signal questions_loaded
+## Emitted instead of questions_loaded when a request fails; message is for the student.
+signal questions_failed(minigame_id: int, message: String)
 
 # Called when the node enters the scene tree for the first time.
 # Load all the questions from the database
@@ -76,6 +78,11 @@ func get_final_boss_questions():
 	minigame_id = 12
 	get_questions(minigame_id)
 	
+## Loads one minigame's questions again, e.g. after a failure.
+func reload(id: int) -> void:
+	minigame_id = id
+	get_questions(id)
+
 func get_questions(minigame_id):
 	post_data["MinigameID"] = minigame_id
 	post_data["ClassroomID"] = PlayerState.classroom_id
@@ -89,9 +96,10 @@ func get_questions(minigame_id):
 		url = Global.server_url("/game/getmcquestions")	
 
 	var http_request = HTTPRequest.new()
+	http_request.timeout = 15
 	add_child(http_request)
 	# Bind this request's own minigame: another load can change the shared minigame_id before this one returns.
-	http_request.request_completed.connect(self._http_request_completed.bind(minigame_id))
+	http_request.request_completed.connect(self._http_request_completed.bind(minigame_id, http_request))
 
 	var json_body = JSON.stringify(post_data)
 	var headers = ["Content-type: application/json"]
@@ -99,13 +107,18 @@ func get_questions(minigame_id):
 	# execute POST request
 	var error = http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
 	if error != OK:
-		print("error: unable to make request")
+		http_request.queue_free()
+		questions_failed.emit.call_deferred(minigame_id, "That server address doesn't look right. Log in again.")
 		
 # Called when the HTTP request is completed.
-func _http_request_completed(_result, response_code, _headers, body, requested_minigame_id):
-	if response_code == 200:
+func _http_request_completed(result, response_code, _headers, body, requested_minigame_id, http_request):
+	http_request.queue_free()
+	if RequestErrors.ok(result, response_code):
 		var json = JSON.new()
 		var error = json.parse(body.get_string_from_utf8())
+		if error != OK:
+			questions_failed.emit(requested_minigame_id, "Unexpected reply from the server. Try again.")
+			return
 		if error == OK:
 			var response = json.get_data()
 			if requested_minigame_id == 1:
@@ -138,7 +151,7 @@ func _http_request_completed(_result, response_code, _headers, body, requested_m
 			
 			emit_signal("questions_loaded")
 	else:
-		print("HTTP request failed with code: error in get fractions", response_code)
+		questions_failed.emit(requested_minigame_id, RequestErrors.describe(result, response_code, Global.host_ip))
 
 func constructFractionQuestions(response, operation):
 	var questions = []

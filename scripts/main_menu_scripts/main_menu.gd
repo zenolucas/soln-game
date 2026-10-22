@@ -23,6 +23,12 @@ func _ready():
 			load_button.disabled = false
 			status_label.text = "")
 		SaveState.connect("saved_data_loaded", _on_saved_data_loaded)
+		SaveState.saved_data_failed.connect(func(message):
+			load_button.disabled = false
+			status_label.text = "Couldn't load your save."
+			NoticeOverlay.ask(self, "Couldn't load your save", message, ["TRY AGAIN", "CLOSE"], func(choice):
+				if choice == 0:
+					_on_load_game_pressed()))
 		SaveState.load_save_data(PlayerState.student_id)
 	else:
 		$Mode/Label.text = "OFFLINE MODE"
@@ -105,6 +111,11 @@ func _on_quit_pressed() -> void:
 	get_tree().quit(0)
 
 func _on_load_game_pressed() -> void:
+	if Global.is_online and not SaveState.load_success:
+		load_button.disabled = true
+		status_label.text = "Loading your save..."
+		SaveState.load_save_data(PlayerState.student_id)
+		return
 	print("Loading game based on saved variables, current floor: ", Global.current_floor)
 	match Global.current_floor:
 		1:

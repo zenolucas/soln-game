@@ -174,6 +174,7 @@ func _build_ui() -> void:
 func _load_questions():
 	print("current quest is ", DialogueState.current_quest)
 	QuestionsLoader.connect("questions_loaded", _on_questions_loaded)
+	QuestionsLoader.questions_failed.connect(_on_questions_failed)
 	match DialogueState.current_quest:
 		"saisai_wheelbarrow":
 			QuestionsLoader.get_saisai_questions()
@@ -187,6 +188,16 @@ func _load_questions():
 			QuestionsLoader.get_water2_questions()
 		"water_room_3":
 			QuestionsLoader.get_water3_questions()
+
+## Online only: the questions didn't arrive. Let the student retry or leave.
+func _on_questions_failed(failed_minigame_id: int, message: String) -> void:
+	if failed_minigame_id != QuestionsLoader.minigame_id:
+		return
+	NoticeOverlay.ask(get_tree().current_scene, "Couldn't load the questions", message, ["TRY AGAIN", "BACK TO MAP"], func(choice):
+		if choice == 0:
+			QuestionsLoader.reload(failed_minigame_id)
+		else:
+			get_tree().change_scene_to_file(Global.floor_scene()))
 
 func _on_questions_loaded():
 	match DialogueState.current_quest:

@@ -47,6 +47,7 @@ func _ready():
 	if Global.is_online:
 		print("ONLINE MODE: CURRENT QUEST IS: ", DialogueState.current_quest)
 		QuestionsLoader.connect("questions_loaded", _on_questions_loaded)
+		QuestionsLoader.questions_failed.connect(_on_questions_failed)
 		if DialogueState.current_quest == "face_the_snake_post_cutscene":
 			QuestionsLoader.get_snekkers_questions()
 		elif DialogueState.current_quest == "crab_boss":
@@ -118,6 +119,16 @@ func _ready():
 			["What is 3/4 - 1/2?", "1/4", "1/2", "1/3", "2/4", "1/4"]
 			]
 			
+## Online only: the questions didn't arrive. Let the student retry or leave.
+func _on_questions_failed(failed_minigame_id: int, message: String) -> void:
+	if failed_minigame_id != QuestionsLoader.minigame_id:
+		return
+	NoticeOverlay.ask(get_tree().current_scene, "Couldn't load the questions", message, ["TRY AGAIN", "BACK TO MAP"], func(choice):
+		if choice == 0:
+			QuestionsLoader.reload(failed_minigame_id)
+		else:
+			get_tree().change_scene_to_file(Global.floor_scene()))
+
 func _on_questions_loaded():
 	if DialogueState.current_quest == "face_the_snake_post_cutscene":
 		mc_questions = QuestionsLoader.snekkers_questions

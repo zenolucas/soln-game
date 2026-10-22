@@ -7,7 +7,7 @@ var numerator := Label.new()
 var rule := ColorRect.new()
 var denominator := Label.new()
 
-func _init(num = 0, den = 1) -> void:
+func _init(num = "?", den = "?") -> void:
 	alignment = BoxContainer.ALIGNMENT_CENTER
 	size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	add_theme_constant_override("separation", 4)

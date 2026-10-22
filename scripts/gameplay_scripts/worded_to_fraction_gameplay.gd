@@ -164,10 +164,21 @@ func _show(message: String, kind: String, boxes: Array = []) -> void:
 	elif kind == "success":
 		answer_fraction.flash("correct")
 
+## Online only: the questions didn't arrive. Let the student retry or leave.
+func _on_questions_failed(failed_minigame_id: int, message: String) -> void:
+	if failed_minigame_id != QuestionsLoader.minigame_id:
+		return
+	NoticeOverlay.ask(get_tree().current_scene, "Couldn't load the questions", message, ["TRY AGAIN", "BACK TO MAP"], func(choice):
+		if choice == 0:
+			QuestionsLoader.reload(failed_minigame_id)
+		else:
+			get_tree().change_scene_to_file(Global.floor_scene()))
+
 # Initialize questions and context texts based on the current quest
 func initiate_questions():
 	print(DialogueState.current_quest)
 	QuestionsLoader.connect("questions_loaded", _on_questions_loaded)
+	QuestionsLoader.questions_failed.connect(_on_questions_failed)
 
 	if DialogueState.current_quest == "raket_stealing":
 		print("Current quest is raket stealing")
