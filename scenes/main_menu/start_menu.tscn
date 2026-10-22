@@ -95,17 +95,6 @@ script = ExtResource("1_a73is")
 position = Vector2(528, 288)
 scale = Vector2(2.00823, 2.02335)
 
-[node name="OfflineMode" type="Button" parent="."]
-layout_mode = 0
-offset_left = 409.0
-offset_top = 229.0
-offset_right = 751.0
-offset_bottom = 263.0
-theme_override_fonts/font = ExtResource("3_fknky")
-theme_override_font_sizes/font_size = 25
-text = "© HexOffenders"
-flat = true
-
 [node name="SolnBackground" type="AnimatedSprite2D" parent="."]
 position = Vector2(527.951, 287.86)
 scale = Vector2(2.00804, 2.05082)
@@ -217,7 +206,6 @@ theme_override_font_sizes/font_size = 25
 text = "Play Offline"
 flat = true
 
-[connection signal="button_down" from="OfflineMode" to="." method="_on_offline_mode_button_down"]
 [connection signal="mouse_entered" from="Copyright" to="Copyright" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Copyright" to="Copyright" method="_on_mouse_exited"]
 [connection signal="button_down" from="Buttons/Register" to="." method="_on_register_button_down"]

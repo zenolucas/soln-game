@@ -12,7 +12,8 @@ var current_water_level = 100
 func _process(delta: float) -> void:
 	water_level_bar.value = current_water_level
 	#LEVEL COMPLETE!!!
-	if current_water_level == 0:
+	if current_water_level == 0 and not already_added:
+		already_added = true
 		if DialogueState.current_quest == "water_room_1":
 			DialogueState.current_quest = "after_wr_1"
 			PlayerState.autosave()
@@ -23,8 +24,7 @@ func _process(delta: float) -> void:
 			DialogueState.current_quest = "after_wr_3" 
 			PlayerState.autosave()
 		congrats.visible = true
-		if not already_added:
-			Global.add_energy()
+		Global.add_energy()
 		
 
 func _on_fraction_problem_correct() -> void:

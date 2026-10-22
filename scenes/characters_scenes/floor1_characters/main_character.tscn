@@ -546,6 +546,7 @@ texture = ExtResource("15_bfv3w")
 
 [node name="PauseScreen" type="Control" parent="UI"]
 visible = false
+process_mode = 3
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

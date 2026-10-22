@@ -132,7 +132,6 @@ patch_margin_top = 16
 patch_margin_right = 8
 patch_margin_bottom = 16
 
-[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="container/VBoxContainer/Answers/a/Choice 1" to="." method="_on_choice_1_pressed"]
 [connection signal="pressed" from="container/VBoxContainer/Answers/b/Choice 2" to="." method="_on_choice_2_pressed"]
 [connection signal="pressed" from="container/VBoxContainer/Answers/c/Choice 3" to="." method="_on_choice_3_pressed"]

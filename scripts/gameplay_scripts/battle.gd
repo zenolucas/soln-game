@@ -1,8 +1,7 @@
 extends Control
-@onready var attack_button = $Actions/Attack
+@onready var attack_button = $Attack/Attack
 @onready var enemy_hp = $"Enemy HP"
 @onready var question = $Question
-@onready var actions = $Actions
 @onready var question_bg = $"Question BG"
 @onready var snekker_sprite = $"Enemy Sprite"
 

@@ -148,6 +148,7 @@ tile_map_data = PackedByteArray("AAD/////AgAAAAAAAAD//wAAAgAAAAAAAAD//wEAAgAAAAA
 tile_set = SubResource("TileSet_3x3ed")
 
 [node name="Question" parent="." instance=ExtResource("9_f0g0v")]
+visible = false
 layout_mode = 1
 offset_left = 152.0
 offset_top = 105.0
