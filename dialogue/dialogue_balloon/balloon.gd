@@ -14,7 +14,8 @@ extends CanvasLayer
 @onready var responses_menu: DialogueResponsesMenu = %ResponsesMenu
 
 @onready var talking_sounds: AudioStreamPlayer = $TalkingSounds
-@onready var next_dialogue_indicator: TextureRect = $Balloon/TextureRect/NextDialogueIndicator
+@onready var next_dialogue_indicator: TextureRect = %NextDialogueIndicator
+@onready var hint: Label = %Hint
 
 ## The dialogue resource
 var resource: DialogueResource
@@ -27,6 +28,7 @@ var is_waiting_for_input: bool = false:
 	set(value): #Indicator visible when waiting for input 
 		is_waiting_for_input = value
 		next_dialogue_indicator.visible = value
+		hint.visible = value
 	get:
 		return is_waiting_for_input
 
@@ -61,11 +63,13 @@ var dialogue_line: DialogueLine:
 		
 		# Reference the portrait based on the character name in the dialogue file
 		# Do you understand?
-		var portrait_path: String = "res://assets/character_portraits/%s.png" % dialogue_line.character.to_lower();
-		if ResourceLoader.exists(portrait_path):
-			portrait.texture = load(portrait_path)
-		else:
-			portrait.texture = null
+		# The files are named "Saisai.png", so try the name as written before the lowercase form.
+		portrait.texture = null
+		for portrait_name in [dialogue_line.character, dialogue_line.character.to_lower()]:
+			var portrait_path: String = "res://assets/character_portraits/%s.png" % portrait_name
+			if not portrait_name.is_empty() and ResourceLoader.exists(portrait_path):
+				portrait.texture = load(portrait_path)
+				break
 		
 
 		dialogue_label.hide()
@@ -102,6 +106,7 @@ var dialogue_line: DialogueLine:
 func _ready() -> void:
 	balloon.hide()
 	next_dialogue_indicator.hide()
+	hint.hide()
 	Engine.get_singleton("DialogueManager").mutated.connect(_on_mutated)
 
 	# If the responses menu doesn't have a next action set, use this one
