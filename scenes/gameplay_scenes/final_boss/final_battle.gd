@@ -3,8 +3,13 @@ extends Control
 @onready var enemy_hp = $"Enemy HP"
 @onready var question = $Question
 @onready var question_bg = $"Question BG"
+@onready var boss_light = $FinalBoss/PointLight2D
 
 func _ready() -> void:
+	attack_button.grab_focus()
+	question.visibility_changed.connect(func():
+		if not question.visible:
+			attack_button.grab_focus.call_deferred())
 	Global.guardian_enemy_hp = 100
 
 func _process(delta: float) -> void:
@@ -13,13 +18,13 @@ func _process(delta: float) -> void:
 	if Global.guardian_enemy_question == true:
 		question.show()
 		question_bg.show()
+		boss_light.hide() # the boss's glow would otherwise tint the quiz panel
 		
 	else:
 		question.hide()
 		question_bg.hide()
+		boss_light.show()
 
-	if Global.guardian_enemy_hp <= 50:
-		enemy_hp.add_theme_color_override("font_color", "#933f45")
 	
 	if Global.guardian_enemy_hp == 0:
 		DialogueState.current_quest = "final_boss_quiz_successful"

@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://u4k3ryv31ukj"]
+[gd_scene load_steps=2 format=3 uid="uid://u4k3ryv31ukj"]
 
 [ext_resource type="Script" path="res://scripts/gameplay_scripts/question.gd" id="1_pk2pt"]
-[ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="2_s2l85"]
-[ext_resource type="Texture2D" uid="uid://brh6b8ufqdjks" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/board_box.png" id="3_7wfmq"]
 
 [node name="Question" type="Control"]
 layout_mode = 3
@@ -14,14 +12,13 @@ grow_vertical = 2
 script = ExtResource("1_pk2pt")
 
 [node name="bg" type="ColorRect" parent="."]
-self_modulate = Color(0.729412, 0.729412, 0.729412, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.207843, 0.168627, 0.25098, 1)
+color = Color(0.180392, 0.203922, 0.25098, 0.96)
 
 [node name="container" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -30,109 +27,93 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 100
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 100
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 40
 
 [node name="VBoxContainer" type="VBoxContainer" parent="container"]
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 30
-
-[node name="Content" type="Label" parent="container/VBoxContainer"]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_s2l85")
-theme_override_font_sizes/font_size = 50
-text = "Test
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Answers" type="VBoxContainer" parent="container/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 24
 alignment = 1
 
-[node name="a" type="MarginContainer" parent="container/VBoxContainer/Answers"]
+[node name="Top" type="HBoxContainer" parent="container/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="Choice 1" type="Button" parent="container/VBoxContainer/Answers/a"]
+[node name="Portrait" type="TextureRect" parent="container/VBoxContainer/Top"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_s2l85")
-theme_override_font_sizes/font_size = 25
-text = "a"
-flat = true
+size_flags_vertical = 0
+expand_mode = 1
+stretch_mode = 5
 
-[node name="NinePatchRect" type="NinePatchRect" parent="container/VBoxContainer/Answers/a"]
+[node name="SpeechBox" type="PanelContainer" parent="container/VBoxContainer/Top"]
 layout_mode = 2
-texture = ExtResource("3_7wfmq")
-region_rect = Rect2(0, 0, 24, 24)
-patch_margin_left = 8
-patch_margin_top = 16
-patch_margin_right = 8
-patch_margin_bottom = 16
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_type_variation = &"SpeechBox"
 
-[node name="b" type="MarginContainer" parent="container/VBoxContainer/Answers"]
+[node name="Content" type="Label" parent="container/VBoxContainer/Top/SpeechBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "What is 1/3 + 1/3?"
+autowrap_mode = 3
 
-[node name="Choice 2" type="Button" parent="container/VBoxContainer/Answers/b"]
+[node name="Answers" type="GridContainer" parent="container/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_s2l85")
-theme_override_font_sizes/font_size = 25
-text = "b"
-flat = true
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="container/VBoxContainer/Answers/b"]
+[node name="Choice1" type="Button" parent="container/VBoxContainer/Answers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-texture = ExtResource("3_7wfmq")
-region_rect = Rect2(0, 0, 24, 24)
-patch_margin_left = 8
-patch_margin_top = 16
-patch_margin_right = 8
-patch_margin_bottom = 16
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+text = "A. 1/2"
+alignment = 0
+text_overrun_behavior = 3
 
-[node name="c" type="MarginContainer" parent="container/VBoxContainer/Answers"]
+[node name="Choice2" type="Button" parent="container/VBoxContainer/Answers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+text = "B. 2/3"
+alignment = 0
+text_overrun_behavior = 3
 
-[node name="Choice 3" type="Button" parent="container/VBoxContainer/Answers/c"]
+[node name="Choice3" type="Button" parent="container/VBoxContainer/Answers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_s2l85")
-theme_override_font_sizes/font_size = 25
-text = "c"
-flat = true
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+text = "C. 3/3"
+alignment = 0
+text_overrun_behavior = 3
 
-[node name="NinePatchRect" type="NinePatchRect" parent="container/VBoxContainer/Answers/c"]
+[node name="Choice4" type="Button" parent="container/VBoxContainer/Answers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-texture = ExtResource("3_7wfmq")
-region_rect = Rect2(0, 0, 24, 24)
-patch_margin_left = 8
-patch_margin_top = 16
-patch_margin_right = 8
-patch_margin_bottom = 16
+size_flags_horizontal = 3
+theme_type_variation = &"ChoiceButton"
+text = "D. 4/3"
+alignment = 0
+text_overrun_behavior = 3
 
-[node name="d" type="MarginContainer" parent="container/VBoxContainer/Answers"]
+[node name="Feedback" type="Label" parent="container/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-
-[node name="Choice 4" type="Button" parent="container/VBoxContainer/Answers/d"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_s2l85")
-theme_override_font_sizes/font_size = 25
-text = "d"
-flat = true
-
-[node name="NinePatchRect" type="NinePatchRect" parent="container/VBoxContainer/Answers/d"]
-layout_mode = 2
-texture = ExtResource("3_7wfmq")
-region_rect = Rect2(0, 0, 24, 24)
-patch_margin_left = 8
-patch_margin_top = 16
-patch_margin_right = 8
-patch_margin_bottom = 16
-
-[connection signal="pressed" from="container/VBoxContainer/Answers/a/Choice 1" to="." method="_on_choice_1_pressed"]
-[connection signal="pressed" from="container/VBoxContainer/Answers/b/Choice 2" to="." method="_on_choice_2_pressed"]
-[connection signal="pressed" from="container/VBoxContainer/Answers/c/Choice 3" to="." method="_on_choice_3_pressed"]
-[connection signal="pressed" from="container/VBoxContainer/Answers/d/Choice 4" to="." method="_on_choice_4_pressed"]
+theme_type_variation = &"Feedback"
+text = "Press 1-4 or click an answer."
+horizontal_alignment = 1
