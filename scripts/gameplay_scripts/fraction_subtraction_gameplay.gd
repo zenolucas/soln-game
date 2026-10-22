@@ -25,16 +25,22 @@ var current_question_index = 0  # Track which question the player is on
 @onready var num_right_ans = 0
 @onready var num_wrong_ans = 0
 
-# Nodes for user inputs and display
-@onready var first_fraction_numerator: LineEdit = $solution/first_fraction/VBoxContainer/Numerator/NumeratorAnswer
-@onready var first_fraction_denominator: LineEdit = $solution/first_fraction/VBoxContainer/Denominator/DenominatorAnswer
-@onready var second_fraction_numerator: LineEdit = $solution/second_fraction/VBoxContainer/Numerator/NumeratorAnswer
-@onready var second_fraction_denominator: LineEdit = $solution/second_fraction/VBoxContainer/Denominator/DenominatorAnswer
-@onready var numerator_answer: LineEdit = $solution/answer/VBoxContainer/Numerator/NumeratorAnswer
-@onready var denominator_answer: LineEdit = $solution/answer/VBoxContainer/Denominator/DenominatorAnswer
-@onready var display_answer: Label = $DisplayAnswer/UserAnswer
-@onready var submit_answer = $SubmitAnswer
-@onready var question_label: Label = $question/MarginContainer/Label  # Label to display question text
+# Built in _build_ui(): the student types the two fractions from the story,
+# then the answer, in the QuestionFrame's equation bar.
+var frame: QuestionFrame
+var first_fraction: AnswerFraction
+var second_fraction: AnswerFraction
+var answer_fraction: AnswerFraction
+var operands: HBoxContainer
+var first_fraction_numerator: LineEdit
+var first_fraction_denominator: LineEdit
+var second_fraction_numerator: LineEdit
+var second_fraction_denominator: LineEdit
+var numerator_answer: LineEdit
+var denominator_answer: LineEdit
+var display_answer: Label
+var submit_answer: Button
+var question_label: Label
 
 @onready var npc_sprite = $NPC_Sprites
 
@@ -46,7 +52,9 @@ var current_chosen_questions: Array = []
 var chosen_index_questions: Array[int] = []
 
 func _ready():
+	_build_ui()
 	npc_active()
+	frame.place_npc(npc_sprite)
 	
 	if Global.is_online:
 		print("online mode")
@@ -76,6 +84,50 @@ func npc_active():
 	else:
 		print("No npc found!")
 	npc_sprite.play(current_npc)
+
+func _build_ui() -> void:
+	frame = $Frame
+	operands = HBoxContainer.new()
+	operands.add_theme_constant_override("separation", 20)
+	first_fraction = AnswerFraction.new(2, "?", "?")
+	second_fraction = AnswerFraction.new(2, "?", "?")
+	answer_fraction = AnswerFraction.new(3)
+	operands.add_child(first_fraction)
+	var operator := Label.new()
+	operator.theme_type_variation = &"EquationText"
+	operator.text = FractionText.op_symbol("-")
+	operands.add_child(operator)
+	operands.add_child(second_fraction)
+	frame.add_to_equation(operands)
+	frame.add_equation_text("=")
+	frame.add_to_equation(answer_fraction)
+
+	first_fraction_numerator = first_fraction.numerator
+	first_fraction_denominator = first_fraction.denominator
+	second_fraction_numerator = second_fraction.numerator
+	second_fraction_denominator = second_fraction.denominator
+	numerator_answer = answer_fraction.numerator
+	denominator_answer = answer_fraction.denominator
+	display_answer = frame.feedback_label
+	submit_answer = frame.submit_button
+	question_label = frame.prompt_label
+
+	# Enter walks through the boxes left to right, then submits.
+	first_fraction.submitted.connect(second_fraction.focus_first)
+	second_fraction.submitted.connect(answer_fraction.focus_first)
+	answer_fraction.submitted.connect(_on_submit_answer_button_down)
+	frame.submitted.connect(_on_submit_answer_button_down)
+	frame.show_feedback("Find the two fractions in the story, then type the answer.")
+
+## kind is "info", "success", "warning" or "error". Errors flash the boxes that are
+## wrong (the answer unless `boxes` says otherwise); successes flash the answer green.
+func _show(message: String, kind: String, boxes: Array = []) -> void:
+	frame.show_feedback(message, kind)
+	if kind == "error":
+		for box in (boxes if boxes else [answer_fraction]):
+			box.flash("wrong")
+	elif kind == "success":
+		answer_fraction.flash("correct")
 
 # Initialize questions and context texts based on the current quest
 func initiate_questions():
@@ -114,7 +166,8 @@ func display_current_question():
 	denominator_answer.text = ""
 	
 	# Set the question text for the current round
-	question_label.text = current_question[0]
+	frame.set_prompt(current_question[0])
+	first_fraction.focus_first()
 
 # Called when the submit answer button is pressed
 func _on_submit_answer_button_down():
@@ -127,11 +180,17 @@ func _on_submit_answer_button_down():
 	var answer_denominator = int(denominator_answer.text)
 	
 	print("Input matches question: ", input_matches_question(first_numerator, first_denominator, second_numerator, second_denominator))
+	for box in [first_fraction_numerator, first_fraction_denominator, second_fraction_numerator, second_fraction_denominator, numerator_answer, denominator_answer]:
+		if box.text == "":
+			_show("Fill in all six boxes first.", "warning")
+			box.grab_focus()
+			return
+
 	# Validate the inputted fractions against the question
 	if input_matches_question(first_numerator, first_denominator, second_numerator, second_denominator):
 		# Check if the inputs are empty
 		if numerator_answer.text == "" or denominator_answer.text == "":
-			display_answer.text = "Please fill in both the numerator and denominator."
+			_show("Please fill in both the numerator and denominator.", "warning")
 			num_wrong_ans += 1
 			emit_signal("incorrect")
 			print("Empty input detected.")
@@ -139,7 +198,7 @@ func _on_submit_answer_button_down():
 		
 		# Validate the numerator and denominator inputs
 		elif !is_valid_integer(numerator_answer.text) or !is_valid_integer(denominator_answer.text):
-			display_answer.text = "Please enter valid numbers."
+			_show("Please enter valid numbers.", "error")
 			num_wrong_ans += 1
 			emit_signal("incorrect")
 			print("Invalid input detected: Non-integer value entered.")
@@ -150,7 +209,7 @@ func _on_submit_answer_button_down():
 			fraction_addition_checker(first_numerator, first_denominator, second_numerator, second_denominator, answer_numerator, answer_denominator)
 		
 	elif !input_matches_question(first_numerator, first_denominator, second_numerator, second_denominator):
-		display_answer.text = "Input the fractions that you have found in their proper order."
+		_show("Input the fractions that you have found in their proper order.", "error", [first_fraction, second_fraction])
 		num_wrong_ans += 1
 		emit_signal("incorrect")
 		
@@ -177,26 +236,26 @@ func fraction_addition_checker(first_numerator: int, first_denominator: int, sec
 		
 		if is_simplified:
 			if check_simplified_form(added_numerator, first_denominator):
-				handle_correct("Nice! \nCorrect simplified form.")
+				handle_correct("Nice! Correct simplified form.")
 				is_simplified = false
 				
 			else:
-				handle_incorrect("Try again. \nCheck your GCD value.")
+				handle_incorrect("Try again. Check your GCD value.")
 				is_simplified = true
 		
 		elif added_numerator == answer_numerator and first_denominator == answer_denominator:
 			if GlobalFractionFunctions.check_lowest_form(added_numerator, int(denominator_answer.text)):
-				handle_correct_unsimplified("Good job! \nBut answer can be simplified.")
+				handle_correct_unsimplified("Good job! But answer can be simplified.")
 				is_simplified = true
 				
 			else:
-				handle_correct("Great job! \nCorrect answer!")
+				handle_correct("Great job! Correct answer!")
 		
 		elif check_simplified_form(added_numerator, first_denominator) and !is_simplified:
-			handle_correct("Advanced thinking! \nYou entered its simplified form.")
+			handle_correct("Advanced thinking! You entered its simplified form.")
 		
 		else:
-			handle_incorrect("Try again. Check your numerator\n or denominator.")
+			handle_incorrect("Try again. Check your numerator or denominator.")
 
 	# If denominators are different, find the least common denominator (LCD)
 	else:
@@ -209,30 +268,30 @@ func fraction_addition_checker(first_numerator: int, first_denominator: int, sec
 		
 		if is_simplified:
 			if check_simplified_form(added_adjusted_numerator, lcd):
-				handle_correct("Nice! \nCorrect simplified form.")
+				handle_correct("Nice! Correct simplified form.")
 				is_simplified = false
 				
 			else:
-				handle_incorrect("Try again. \nCheck your GCD value.")
+				handle_incorrect("Try again. Check your GCD value.")
 				is_simplified = true
 		
 		elif added_adjusted_numerator == answer_numerator and lcd == answer_denominator:
 			if GlobalFractionFunctions.check_lowest_form(added_adjusted_numerator, int(denominator_answer.text)):
-				handle_correct_unsimplified("Good job! \nBut answer can be simplified.")
+				handle_correct_unsimplified("Good job! But answer can be simplified.")
 				is_simplified = true
 				
 			else:
-				handle_correct("Great job! \nCorrect answer!")
+				handle_correct("Great job! Correct answer!")
 		
 		elif check_simplified_form(added_adjusted_numerator, lcd) and !is_simplified:
-			handle_correct("Advanced thinking! \nYou entered its simplified form.")
+			handle_correct("Advanced thinking! You entered its simplified form.")
 			
 		else:
-			handle_incorrect("Try again. Check your numerator\n or denominator.")
+			handle_incorrect("Try again. Check your numerator or denominator.")
 
 # Handle correct answer
 func handle_correct(message: String):
-	display_answer.text = message
+	_show(message, "success")
 	emit_signal("correct")
 	num_right_ans += 1
 	if Global.is_online:
@@ -241,12 +300,12 @@ func handle_correct(message: String):
 
 # Handle correct unsimplified answer
 func handle_correct_unsimplified(message: String):
-	display_answer.text = message
+	_show(message, "warning")
 	emit_signal("correct")
 
 # Handle incorrect answer
 func handle_incorrect(message: String):
-	display_answer.text = message
+	_show(message, "error")
 	emit_signal("incorrect")
 	num_wrong_ans += 1
 
@@ -269,7 +328,7 @@ func next_question_or_finish():
 		display_current_question()  # Update the UI with the next question
 	else:
 		disable_inputs()
-		question_label.text = "All questions completed!\nReturning to the world..."
+		frame.set_prompt("All questions completed! Returning to the world...")
 		await get_tree().create_timer(3.0).timeout
 		return_to_world()
 
