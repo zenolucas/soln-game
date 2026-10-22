@@ -6,6 +6,7 @@
 offset_right = 8.0
 offset_bottom = 8.0
 tooltip_text = "Show a tutorial for this problem"
+theme_type_variation = &"SmallButton"
 text = "? Help"
 script = ExtResource("2_r3bm5")
 

@@ -1,5 +1,8 @@
 extends Control
 
+func _ready() -> void:
+	$Buttons/Login.grab_focus()
+
 
 func _on_register_button_down():
 	get_tree().change_scene_to_file("res://scenes/student_scene/student_register.tscn")
