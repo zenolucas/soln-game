@@ -25,7 +25,7 @@ func _init(max_length := 2, numerator_hint := "", denominator_hint := "") -> voi
 		box.theme_type_variation = &"AnswerBox"
 		box.max_length = max_length
 		box.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		box.custom_minimum_size = Vector2(40 + 16 * max_length, 40)
+		box.custom_minimum_size = Vector2(24 + 16 * max_length, 40)
 		box.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER
 		box.select_all_on_focus = true
 		box.context_menu_enabled = false

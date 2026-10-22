@@ -91,37 +91,85 @@ var num_wrong_ans: int
 var minigame_id
 
 var question_index:int = 0
+
+## Shown top-left in the question frame when the host has no animated NPC to place there.
+@export var portrait_texture: Texture2D
+@export var show_portrait := true
+
+# The UI is built in _build_ui(); these keep the names the tests and hosts use.
+var frame: QuestionFrame
+var fraction1: StackedFraction
+var fraction2: StackedFraction
+var operands: HBoxContainer
+var answer_fraction: AnswerFraction
+var current_op := "+"
 # numerator and denominator of first and second fraction
-@onready var denum1 = $VBoxContainer/Problem/Fraction1/VBoxContainer/Denominator
-@onready var num1 = $VBoxContainer/Problem/Fraction1/VBoxContainer/Numerator
-@onready var denum2 = $VBoxContainer/Problem/Fraction2/VBoxContainer/Denominator
-@onready var num2 = $VBoxContainer/Problem/Fraction2/VBoxContainer/Numerator
-@onready var operator = $VBoxContainer/Problem/Operator/Label
+var denum1
+var num1
+var denum2
+var num2
+var operator
 
 # input numerator and denominator
-@onready var num_input = $VBoxContainer/Problem/Answer/Fraction/Numerator/NumeratorAnswer
-@onready var denum_input = $VBoxContainer/Problem/Answer/Fraction/Denominator/DenominatorAnswer
+var num_input
+var denum_input
 
 # label display for the result
-@onready var result_display = $VBoxContainer/Result
+var result_display
 
-@onready var submit_button = $VBoxContainer/Submit/SubmitAnswer
+var submit_button
 
 var user_answer: Array [int] = []
 var correct_answer: Array [int] = []
 
 func _ready() -> void:
+	_build_ui()
 	#Load the questions variable with placeholders for addition and subtraction
 	load_default_questions()
 	if Global.is_online:
-		print("online mode")
+		frame.set_prompt("Loading questions...")
+		frame.set_submit_enabled(false)
+		answer_fraction.set_editable(false)
 		_load_questions()
 	else: # else display hard coded values
-		print("offline mode")
 		Global.choose_question(questions)
 		Global.randomize_questions(questions, current_chosen_questions, chosen_index_questions)
 		_display_question()
 
+func _build_ui() -> void:
+	frame = QuestionFrame.new()
+	frame.name = "Frame"
+	frame.show_portrait = show_portrait
+	frame.portrait_texture = portrait_texture
+	add_child(frame)
+
+	operands = HBoxContainer.new()
+	operands.name = "Operands"
+	operands.add_theme_constant_override("separation", 20)
+	fraction1 = StackedFraction.new()
+	fraction2 = StackedFraction.new()
+	operator = Label.new()
+	operator.theme_type_variation = &"EquationText"
+	operands.add_child(fraction1)
+	operands.add_child(operator)
+	operands.add_child(fraction2)
+	frame.add_to_equation(operands)
+	frame.add_equation_text("=")
+	answer_fraction = AnswerFraction.new(2)
+	frame.add_to_equation(answer_fraction)
+
+	num1 = fraction1.numerator
+	denum1 = fraction1.denominator
+	num2 = fraction2.numerator
+	denum2 = fraction2.denominator
+	num_input = answer_fraction.numerator
+	denum_input = answer_fraction.denominator
+	result_display = frame.feedback_label
+	submit_button = frame.submit_button
+
+	frame.submitted.connect(_on_submit_answer_pressed)
+	answer_fraction.submitted.connect(_on_submit_answer_pressed)
+	frame.show_feedback("Type the answer, then press Enter or SUBMIT.")
 
 func _load_questions():
 	print("current quest is ", DialogueState.current_quest)
@@ -157,6 +205,8 @@ func _on_questions_loaded():
 			
 	Global.choose_question(questions)
 	Global.randomize_questions(questions, current_chosen_questions, chosen_index_questions)
+	frame.set_submit_enabled(true)
+	answer_fraction.set_editable(true)
 	_display_question()
 
 
@@ -173,11 +223,15 @@ func _display_question():
 		num_input.clear()
 		denum_input.clear()
 		
-		num1.text = str(current_chosen_questions[question_index][0])
-		denum1.text = str(current_chosen_questions[question_index][1])
-		num2.text = str(current_chosen_questions[question_index][2])
-		denum2.text = str(current_chosen_questions[question_index][3])
-		operator.text = str(current_chosen_questions[question_index][4])
+		var q = current_chosen_questions[question_index]
+		current_op = str(q[4])
+		num1.text = str(q[0])
+		denum1.text = str(q[1])
+		num2.text = str(q[2])
+		denum2.text = str(q[3])
+		operator.text = FractionText.op_symbol(current_op)
+		frame.set_prompt(FractionText.prompt(q[0], q[1], current_op, q[2], q[3]))
+		answer_fraction.focus_first()
 
 func _disable_questions():
 	emit_signal("all_done")
@@ -185,18 +239,13 @@ func _disable_questions():
 	#help_button.visible = false
 	#help_button.disabled = true
 	
-	num1.text = "0"
-	denum1.text = "0"
-	num2.text = "0"
-	denum2.text = "0"
-	operator.text = "0"
-	
 	num_input.editable = false
 	denum_input.editable = false
 	
 	submit_button.disabled = true
 	
-	result_display.text = "You have answered all the questions"
+	frame.set_prompt("You have answered all the questions!")
+	_show_result("Great work. That's every question.", "success")
 
 
 func _on_submit_answer_pressed() -> void:
@@ -205,7 +254,11 @@ func _on_submit_answer_pressed() -> void:
 	user_answer.append(int(num_input.text))
 	user_answer.append(int(denum_input.text))
 
-	match operator.text:
+	if num_input.text == "" or denum_input.text == "":
+		_show_result("Type both the numerator and the denominator.", "warning")
+		return
+
+	match current_op:
 		"+" :
 			_addition()
 		"-" :
@@ -213,26 +266,26 @@ func _on_submit_answer_pressed() -> void:
 
 func _check_answer():
 	if user_answer[1] == 0:
-		result_display.text = "Zero can't be the denominator"
+		_show_result("Zero can't be the denominator.", "error")
 		num_wrong_ans += 1
 		emit_signal("incorrect")
 		return
 	if user_answer[0] == correct_answer[0] and not user_answer[1] == correct_answer[1]:
-		result_display.text = "Incorrect Denominator Try Again"
+		_show_result("The denominator isn't right. Try again.", "error")
 		num_wrong_ans += 1
 		emit_signal("incorrect")
 		return
 	if not user_answer[0] == correct_answer[0] and user_answer[1] == correct_answer[1]:
-		result_display.text = "Incorrect Numerator Try Again"
+		_show_result("The numerator isn't right. Try again.", "error")
 		num_wrong_ans += 1
 		emit_signal("incorrect")
 		return
 	if not is_simplified():
-		result_display.text = "Answer can still be simplified"
+		_show_result("Answer can still be simplified", "warning")
 		Global.is_simplified_tutorial = true
 		return
 	if user_answer[0] == correct_answer[0] and user_answer[1] == correct_answer[1]:
-		result_display.text = "Correct Answer"
+		_show_result("Correct! On to the next one.", "success")
 		num_right_ans += 1
 		Global.is_simplified_tutorial = false
 		emit_signal("correct")
@@ -242,10 +295,21 @@ func _check_answer():
 			Statistics.post_fraction_statistics(PlayerState.classroom_id, PlayerState.student_id, current_chosen_questions[question_index][5], QuestionsLoader.minigame_id, num_right_ans, num_wrong_ans)
 		next()
 	else:
-		result_display.text = "Incorrect Answer"
+		_show_result("Not quite. Check both numbers and try again.", "error")
 		num_wrong_ans += 1
 		emit_signal("incorrect")
 	print(correct_answer)
+
+## Shows a feedback message; kind is "info", "success", "warning" or "error".
+## Wrong answers also flash the answer boxes and keep focus there.
+func _show_result(text: String, kind: String) -> void:
+	result_display.text = text
+	if frame:
+		frame.show_feedback(text, kind)
+	if answer_fraction and kind != "info" and kind != "warning":
+		answer_fraction.flash("correct" if kind == "success" else "wrong")
+	if kind == "error" and num_input and num_input.is_inside_tree():
+		num_input.grab_focus()
 
 func _addition():
 	print("Addition")

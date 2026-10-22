@@ -7,6 +7,7 @@ extends PanelContainer
 
 signal submitted
 
+const LONG_PROMPT := 90
 const FEEDBACK_VARIATIONS := {
 	"info": &"Feedback",
 	"success": &"FeedbackSuccess",
@@ -46,7 +47,7 @@ func _init() -> void:
 	layout.add_child(top)
 
 	portrait.name = "Portrait"
-	portrait.custom_minimum_size = Vector2(160, 176)
+	portrait.custom_minimum_size = Vector2(224, 176)
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	portrait.resized.connect(_center_npc)
 	top.add_child(portrait)
@@ -91,8 +92,10 @@ func _init() -> void:
 	submit_button.pressed.connect(submitted.emit)
 	footer.add_child(submit_button)
 
+## Short prompts use the large size; long word problems drop to 16px so they fit.
 func set_prompt(text: String) -> void:
 	prompt_label.text = text
+	prompt_label.add_theme_font_size_override("font_size", 24 if text.length() <= LONG_PROMPT else 16)
 
 ## kind is "info", "success", "warning" or "error".
 func show_feedback(text: String, kind := "info") -> void:
@@ -124,21 +127,25 @@ func place_npc(npc: Node2D) -> void:
 func _center_npc() -> void:
 	if _npc == null:
 		return
-	var frame_size := _npc_frame_size()
-	if frame_size.x <= 0 or frame_size.y <= 0:
+	var texture := _npc_texture()
+	if texture == null:
 		return
-	var fit := floorf(minf(portrait.size.x / frame_size.x, portrait.size.y / frame_size.y))
+	# Fit the visible pixels, not the frame's transparent padding.
+	var image := texture.get_image()
+	var used := image.get_used_rect() if image else Rect2i(Vector2i.ZERO, Vector2i(texture.get_size()))
+	if used.size.x <= 0 or used.size.y <= 0:
+		used = Rect2i(Vector2i.ZERO, Vector2i(texture.get_size()))
+	var fit := floorf(minf(portrait.size.x / used.size.x, portrait.size.y / used.size.y))
 	_npc.scale = Vector2.ONE * maxf(fit, 1.0)
 	var centered: bool = _npc.get("centered") if _npc.get("centered") != null else true
 	var offset: Vector2 = _npc.get("offset") if _npc.get("offset") != null else Vector2.ZERO
-	_npc.position = portrait.size / 2 - (offset * _npc.scale)
-	if not centered:
-		_npc.position -= frame_size * _npc.scale / 2
+	var origin := texture.get_size() / 2 if centered else Vector2.ZERO
+	var used_center := Vector2(used.get_center())
+	_npc.position = portrait.size / 2 - (used_center - origin + offset) * _npc.scale
 
-func _npc_frame_size() -> Vector2:
+func _npc_texture() -> Texture2D:
 	if _npc is AnimatedSprite2D and _npc.sprite_frames:
-		var texture: Texture2D = _npc.sprite_frames.get_frame_texture(_npc.animation, 0)
-		return texture.get_size() if texture else Vector2.ZERO
+		return _npc.sprite_frames.get_frame_texture(_npc.animation, 0)
 	if _npc is Sprite2D and _npc.texture:
-		return _npc.texture.get_size() / Vector2(_npc.hframes, _npc.vframes)
-	return Vector2.ZERO
+		return _npc.texture
+	return null

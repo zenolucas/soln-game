@@ -1,8 +1,7 @@
-[gd_scene load_steps=48 format=3 uid="uid://cl832rhbalsgq"]
+[gd_scene load_steps=47 format=3 uid="uid://cl832rhbalsgq"]
 
 [ext_resource type="Script" path="res://scripts/gameplay_scripts/simple_fraction_addition.gd" id="1_q1p7f"]
 [ext_resource type="PackedScene" uid="uid://0q0ebxluougn" path="res://scenes/ui/energy_bar.tscn" id="2_bpkib"]
-[ext_resource type="Texture2D" uid="uid://kex21phpt41e" path="res://scenes/gameplay_scenes/worded_fraction_gameplay/assets/button_box.png" id="3_5onmm"]
 [ext_resource type="PackedScene" uid="uid://dkqfovnosijms" path="res://scenes/gameplay_scenes/fraction_problem.tscn" id="4_xunm2"]
 [ext_resource type="Texture2D" uid="uid://bjdn5kjtbxs5l" path="res://assets/floor_1/npc/reactions/Old Peculiar Correct.png" id="5_d8xkg"]
 [ext_resource type="Texture2D" uid="uid://cnupb6135utyu" path="res://assets/floor_1/npc/mc idle front.png" id="6_yk0kl"]
@@ -255,47 +254,28 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -9.0
-offset_right = -9.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_q1p7f")
 
 [node name="bg" type="ColorRect" parent="."]
-self_modulate = Color(0.729412, 0.729412, 0.729412, 1)
-layout_mode = 0
-offset_left = -35.0
-offset_top = -20.0
-offset_right = 1049.0
-offset_bottom = 598.0
-color = Color(0.207843, 0.168627, 0.25098, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.180392, 0.203922, 0.25098, 1)
 
 [node name="EnergyBar" parent="." instance=ExtResource("2_bpkib")]
 layout_mode = 1
 
-[node name="board" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 97.0
-offset_right = 166.0
-offset_bottom = 156.0
-scale = Vector2(7.5, 7.5)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="board"]
-layout_mode = 2
-texture = ExtResource("3_5onmm")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
 [node name="FractionProblem" parent="." instance=ExtResource("4_xunm2")]
 layout_mode = 0
-offset_left = 114.0
-offset_top = 168.0
-offset_right = 403.0
-offset_bottom = 389.0
-scale = Vector2(1.5, 1.5)
+offset_left = 32.0
+offset_top = 72.0
+offset_right = 992.0
+offset_bottom = 552.0
 
 [node name="Robot" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -320,10 +300,10 @@ offset_bottom = 40.0
 
 [node name="HelpButton" parent="Tutorials" instance=ExtResource("11_dhte6")]
 layout_mode = 0
-offset_left = 102.0
-offset_top = 172.0
-offset_right = 176.0
-offset_bottom = 196.0
+offset_left = 32.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 56.0
 
 [node name="QuickTutorial" parent="Tutorials" node_paths=PackedStringArray("next") instance=ExtResource("12_gxf0q")]
 visible = false
@@ -579,7 +559,6 @@ autoplay = true
 [connection signal="correct" from="FractionProblem" to="." method="_on_fraction_problem_correct"]
 [connection signal="incorrect" from="FractionProblem" to="." method="_on_fraction_problem_incorrect"]
 
-[editable path="FractionProblem"]
 [editable path="Tutorials/QuickTutorial"]
 [editable path="Tutorials/QuickTutorial2"]
 [editable path="Tutorials/QuickTutorial3"]

@@ -9,7 +9,7 @@ extends Control
 var target: Control
 
 const GAP := 16.0
-const CARD_SIZE := Vector2(384, 224)
+const CARD_SIZE := Vector2(400, 208)
 
 @onready var close_button: Button = $Close/CloseButton
 
@@ -38,23 +38,35 @@ func _fit_to_target() -> void:
 	_place($filter/top, Rect2(hole.position.x, 0, hole.size.x, hole.position.y))
 	_place($filter/bottom, Rect2(hole.position.x, hole.end.y, hole.size.x, screen.size.y - hole.end.y))
 	_place($filter/stopper, hole)
-	# Put the card and its button in the largest free area beside the spotlight.
+	# Put the card and its button beside the spotlight: right, left, below or
+	# above, whichever fits first; otherwise wherever there is most room.
+	var close_size := Vector2(160, 48)
+	var needed := CARD_SIZE + Vector2(0, GAP + close_size.y) + Vector2.ONE * GAP * 2
 	var areas := [
-		Rect2(0, 0, hole.position.x, screen.size.y),
 		Rect2(hole.end.x, 0, screen.size.x - hole.end.x, screen.size.y),
-		Rect2(0, 0, screen.size.x, hole.position.y),
+		Rect2(0, 0, hole.position.x, screen.size.y),
 		Rect2(0, hole.end.y, screen.size.x, screen.size.y - hole.end.y),
+		Rect2(0, 0, screen.size.x, hole.position.y),
 	]
 	var best: Rect2 = areas[0]
 	for area in areas:
+		if area.size.x >= needed.x and area.size.y >= needed.y:
+			best = area
+			break
 		if area.get_area() > best.get_area():
 			best = area
 	var room := best.grow(-GAP)
-	var close_size := Vector2(160, 48)
 	var card_size := Vector2(minf(CARD_SIZE.x, room.size.x), minf(CARD_SIZE.y, room.size.y - close_size.y - GAP))
-	var card_pos := room.get_center() - Vector2(card_size.x, card_size.y + GAP + close_size.y) / 2
-	_place($Content, Rect2(card_pos, card_size))
+	# Keep the card level with the spotlight where the room allows.
+	var stack_height := card_size.y + GAP + close_size.y
+	var card_pos := Vector2(room.get_center().x - card_size.x / 2,
+		clampf(hole.get_center().y - stack_height / 2, room.position.y, room.end.y - stack_height))
 	_place($Close, Rect2(card_pos + Vector2(card_size.x - close_size.x, card_size.y + GAP), close_size))
+	# A wrapped label reports its height for its old width; size the card again
+	# once it has been laid out at the new width.
+	_place($Content, Rect2(card_pos, card_size))
+	await get_tree().process_frame
+	_place($Content, Rect2(card_pos, card_size))
 
 func _place(control: Control, rect: Rect2) -> void:
 	control.visible = rect.size.x > 0 and rect.size.y > 0

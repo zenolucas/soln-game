@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=44 format=3]
+[gd_resource type="Theme" load_steps=45 format=3]
 
 [ext_resource type="FontFile" uid="uid://baqxnk61g1qva" path="res://assets/fonts/PixelOperator8.ttf" id="1_reg"]
 [ext_resource type="FontFile" uid="uid://b7ifwnhbxq6y5" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_bold"]
@@ -68,6 +68,23 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.298039, 0.337255, 0.415686, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="sb_backdrop"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.231373, 0.258824, 0.321569, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.92549, 0.937255, 0.956863, 1)
+expand_margin_left = 12.0
+expand_margin_top = 12.0
+expand_margin_right = 12.0
+expand_margin_bottom = 12.0
 anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="sb_dim"]
@@ -515,6 +532,8 @@ QuestionFrame/base_type = &"PanelContainer"
 QuestionFrame/styles/panel = SubResource("sb_frame")
 HUDPanel/base_type = &"PanelContainer"
 HUDPanel/styles/panel = SubResource("sb_hud")
+CardBackdrop/base_type = &"Panel"
+CardBackdrop/styles/panel = SubResource("sb_backdrop")
 Dim/base_type = &"Panel"
 Dim/styles/panel = SubResource("sb_dim")
 Label/colors/font_color = Color(0.92549, 0.937255, 0.956863, 1)

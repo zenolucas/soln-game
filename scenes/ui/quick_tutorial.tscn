@@ -96,21 +96,20 @@ offset_left = 589.0
 offset_top = 55.0
 offset_right = 978.0
 offset_bottom = 455.0
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
 
 [node name="Bg" type="Panel" parent="Content"]
 show_behind_parent = true
 layout_mode = 2
-theme_type_variation = &"SpeechBox"
+theme_type_variation = &"CardBackdrop"
 
 [node name="Label" type="Label" parent="Content"]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 24
 text = "Answer the question by providing the correct numerator and denominator in the spaces provided"
 horizontal_alignment = 1
 vertical_alignment = 1
